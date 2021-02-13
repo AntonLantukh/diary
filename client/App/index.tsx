@@ -21,4 +21,4 @@ export enum Bool {
     FileNotFound,
 }
 
-export default Application;
+export default hot(Application);

@@ -5,4 +5,4 @@ import App, {Bool} from './App';
 
 console.log(Bool.False);
 
-ReactDOM.render(<App {...{name: 'Anton'}} />, document.querySelector('#root'));
+ReactDOM.hydrate(<App {...{name: 'Anton'}} />, document.querySelector('#root'));
