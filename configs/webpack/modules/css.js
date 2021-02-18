@@ -19,12 +19,25 @@ const CSS_CLIENT_CONFIG = {
                 },
             },
         },
+        {
+            loader: 'postcss-loader',
+        },
     ],
 };
 
 const CSS_SERVER_CONFIG = {
     test: REG_EXP.css,
-    loader: 'null-loader',
+    use: [
+        {
+            loader: 'css-loader',
+            options: {
+                modules: {
+                    compileType: 'module',
+                    exportOnlyLocals: true,
+                },
+            },
+        },
+    ],
 };
 
 module.exports = {

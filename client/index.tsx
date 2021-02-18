@@ -1,8 +1,25 @@
 import React from 'react';
-import ReactDOM from 'react-dom';
+import {hydrate, render} from 'react-dom';
+import {BrowserRouter} from 'react-router-dom';
+import {hot} from 'react-hot-loader/root';
+import {loadableReady} from '@loadable/component';
 
-import App, {Bool} from './App';
+import {getStateFromWindow} from '˜/utils/state';
 
-console.log(Bool.False);
+import Base from 'shared/components/Base';
 
-ReactDOM.hydrate(<App {...{name: 'Anton'}} />, document.querySelector('#root'));
+const HotBase = hot(Base);
+
+const root = document.querySelector('#root');
+const state = getStateFromWindow();
+
+const renderFunction: ReactDOM.Renderer = root?.hasChildNodes() ? hydrate : render;
+
+void loadableReady(() => {
+    renderFunction(
+        <BrowserRouter>
+            <HotBase {...{state}} />
+        </BrowserRouter>,
+        root,
+    );
+});

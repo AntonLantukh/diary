@@ -8,12 +8,12 @@ const {PATHS} = require('../constants');
 module.exports = {
     mode: 'development',
     entry: {
-        app: path.join(PATHS.client, 'index.tsx'),
+        main: path.join(PATHS.client, 'index.tsx'),
     },
     output: {
         filename: '[name].js',
         chunkFilename: '[name].js',
-        path: PATHS.dist,
+        path: path.join(PATHS.dist, 'client'),
     },
     target: 'web',
     resolve: {
@@ -21,6 +21,11 @@ module.exports = {
         extensions: ['.ts', '.tsx', '.js', '.json'],
         alias: {
             'react-dom': '@hot-loader/react-dom',
+            shared: path.resolve(__dirname, '../../shared'),
+            client: path.resolve(__dirname, '../../client'),
+            server: path.resolve(__dirname, '../../server'),
+            '˜': path.resolve(__dirname, '../../client'),
+            '@': path.resolve(__dirname, '../../server'),
         },
     },
     devtool: 'source-map',

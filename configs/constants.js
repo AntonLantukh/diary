@@ -13,4 +13,9 @@ const REG_EXP = {
     node_modules: /node_modules/,
 };
 
-module.exports = {PATHS, REG_EXP};
+const ENVIRONMENT = {
+    server: 'server',
+    client: 'client',
+};
+
+module.exports = {PATHS, REG_EXP, ENVIRONMENT};

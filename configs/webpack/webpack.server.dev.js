@@ -13,15 +13,26 @@ module.exports = {
         app: path.join(PATHS.server, 'index.ts'),
     },
     output: {
-        filename: 'server.js',
-        chunkFilename: 'server.js',
-        path: PATHS.dist,
+        filename: 'index.js',
+        chunkFilename: 'index.js',
+        path: path.join(PATHS.dist, 'server'),
     },
     target: 'node',
-    externals: [nodeExternals()],
+    node: {
+        __dirname: true,
+        __filename: true,
+    },
+    externals: ['@loadable/component', nodeExternals()],
     resolve: {
         symlinks: false,
         extensions: ['.ts', '.tsx', '.js', '.json'],
+        alias: {
+            shared: path.resolve(__dirname, '../../shared'),
+            client: path.resolve(__dirname, '../../client'),
+            server: path.resolve(__dirname, '../../server'),
+            '˜': path.resolve(__dirname, '../../client'),
+            '@': path.resolve(__dirname, '../../server'),
+        },
     },
     devtool: 'source-map',
     module: {

@@ -18,7 +18,15 @@
         "allowUnreachableCode": false,
         "resolveJsonModule": true,
         "skipLibCheck": true,
-        "forceConsistentCasingInFileNames": true
+        "forceConsistentCasingInFileNames": true,
+        "baseUrl": "./",
+        "paths": {
+            "shared/*": ["./shared/*"],
+            "client/*": ["./client/*"],
+            "server/*": ["./server/*"],
+            "˜/*": ["./client/*"],
+            "@/*": ["./server/*"]
+        }
     },
     "include": [
         "client/**/*.js",
@@ -27,7 +35,10 @@
         "server/**/*.ts",
         "server/**/*.tsx",
         "server/**/*.js",
-        "typings/**/*.ts"
+        "typings/**/*.ts",
+        "shared/**/*.ts",
+        "shared/**/*.tsx",
+        "shared/**/*.js"
     ],
     "exclude": ["node_modules", "**/*.spec.ts"]
 }
