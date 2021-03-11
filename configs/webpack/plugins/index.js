@@ -9,7 +9,7 @@ const {DefinePlugin} = require('webpack');
 const {PATHS, ENVIRONMENT} = require('../../constants');
 
 const getCssPlugin = filename => new MiniCssExtractPlugin({filename, chunkFilename: filename});
-const getDefinePlugin = env => new DefinePlugin({__isBrowser__: env === ENVIRONMENT.server ? false : true});
+const getDefinePlugin = env => new DefinePlugin({__IS_BROWSER__: env === ENVIRONMENT.server ? false : true});
 
 const CLEAN_PLUGIN = new CleanWebpackPlugin({cleanStaleWebpackAssets: false});
 const LOADABLE_PLUGIN = new LoadablePlugin();
@@ -20,15 +20,16 @@ const HTML_PLUGIN = new HtmlWebpackPlugin({
 
 module.exports = {
     client: {
-        dev: [getCssPlugin('[name].css'), LOADABLE_PLUGIN, getDefinePlugin(ENVIRONMENT.client), CLEAN_PLUGIN],
+        dev: [CLEAN_PLUGIN, getCssPlugin('[name].css'), LOADABLE_PLUGIN, getDefinePlugin(ENVIRONMENT.client)],
         prod: [
+            CLEAN_PLUGIN,
             getCssPlugin('[name].[contenthash].css'),
             LOADABLE_PLUGIN,
             getDefinePlugin(ENVIRONMENT.client),
-            CLEAN_PLUGIN,
         ],
     },
     server: {
-        dev: [getDefinePlugin(ENVIRONMENT.server), CLEAN_PLUGIN],
+        dev: [CLEAN_PLUGIN, getDefinePlugin(ENVIRONMENT.server)],
+        prod: [CLEAN_PLUGIN, getDefinePlugin(ENVIRONMENT.server)],
     },
 };

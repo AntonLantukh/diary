@@ -1,7 +1,7 @@
 import {ParsedQs} from 'qs';
 import {FunctionComponent} from 'react';
 
-import Main from '˜/pages/Main';
+import Main from 'client/pages/Main/components/LoginModal';
 import Cabinet from '˜/pages/Cabinet';
 
 import MainState from 'shared/state/Main';
@@ -22,8 +22,8 @@ export type RouteConfig = {
     name: string;
     path: string;
     Component: FunctionComponent<Record<string, unknown>>;
-    getInitialData: InitialDataFunction;
     State: Constructable<StateInterface>;
+    getInitialData: InitialDataFunction;
 };
 
 export const routes: RouteConfig[] = [

@@ -1,16 +1,16 @@
 import React, {FunctionComponent} from 'react';
+import {Switch, Route} from 'react-router-dom';
 
-import {getMatchedPage} from 'shared/utils/router';
-import {useState} from '˜/hooks/useState';
+import {routes} from 'shared/routes';
 
-import {BaseStateT} from 'shared/state/Base';
-
-const Router: FunctionComponent = () => {
-    const {common} = useState() as BaseStateT;
-
-    const {Component} = getMatchedPage(common?.pageName || '') || {};
-
-    return Component ? <Component /> : null;
-};
+const Router: FunctionComponent = () => (
+    <Switch>
+        {routes.map(({Component, name, path}) => (
+            <Route key={name} path={path}>
+                <Component />
+            </Route>
+        ))}
+    </Switch>
+);
 
 export default Router;

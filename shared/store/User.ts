@@ -1,13 +1,13 @@
 import {action, computed, makeObservable, observable} from 'mobx';
 
-import {Account} from 'shared/typings/account';
+import {User} from 'shared/typings/user';
 
-interface AccountStoreInterface extends Account {
+interface IUserStore extends User {
     getFullName: string;
     editName(name: string): void;
 }
 
-export default class AccountStore implements AccountStoreInterface {
+export default class UserStore implements IUserStore {
     id;
 
     name;
@@ -16,7 +16,7 @@ export default class AccountStore implements AccountStoreInterface {
 
     email;
 
-    constructor({id, name, surname, email}: Account) {
+    constructor({id, name, surname, email}: User) {
         this.id = id;
         this.name = name;
         this.surname = surname;
@@ -33,7 +33,7 @@ export default class AccountStore implements AccountStoreInterface {
     }
 
     get getFullName(): string {
-        return `${this.name} ${this.surname}`;
+        return `${this?.name || ''} ${this?.surname || ''}`;
     }
 
     editName(name: string): void {

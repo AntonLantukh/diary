@@ -15,9 +15,11 @@
         "build:server-prod": "webpack --config ./configs/webpack/webpack.server.prod.js --mode production --color",
         "build:dev": "NODE_ENV=development npm-run-all --print-label --parallel build:client-dev build:server-dev",
         "build:prod": "NODE_ENV=production npm-run-all --print-label --parallel build:client-prod build:server-prod",
-        "start:cleint-dev": "webpack serve --config ./configs/webpack/webpack.client.dev.js --mode development --color --hot",
-        "start:server": "nodemon dist/server/index.js --watch server/index.ts",
-        "start": "NODE_ENV=development run-s build:dev start:server"
+        "watch:server-dev": "webpack --config ./configs/webpack/webpack.server.dev.js --mode development --color --hot",
+        "watch:nodemon": "nodemon dist/server/index.js --watch dist/server/index.js",
+        "start:client-dev": "webpack serve --config ./configs/webpack/webpack.client.dev.js --mode development --color --hot",
+        "start:server-dev": "run-p watch:server-dev watch:nodemon",
+        "start": "NODE_ENV=development run-p --print-label start:client-dev start:server-dev"
     },
     "repository": {
         "type": "git",
@@ -58,7 +60,9 @@
         "@types/react-router-config": "5.0.2",
         "@types/react-router-dom": "5.1.7",
         "@types/webpack": "4.41.26",
+        "@types/webpack-dev-middleware": "4.1.0",
         "@types/webpack-dev-server": "3.11.1",
+        "@types/webpack-hot-middleware": "2.25.3",
         "@typescript-eslint/eslint-plugin": "4.14.1",
         "@typescript-eslint/parser": "4.14.1",
         "autoprefixer": "9.8.6",
@@ -102,16 +106,21 @@
         "@hot-loader/react-dom": "17.0.1",
         "@loadable/component": "5.14.1",
         "@loadable/server": "5.14.2",
-        "antd": "4.13.0",
+        "@material-ui/core": "4.11.3",
+        "body-parser": "1.19.0",
         "dotenv": "8.2.0",
+        "express": "4.17.1",
+        "express-winston": "4.1.0",
         "mobx": "6.1.6",
         "mobx-react-lite": "3.2.0",
         "mongoose": "5.11.18",
+        "mongoose-beautiful-unique-validation": "7.1.1",
         "react": "17.0.1",
         "react-dom": "17.0.1",
         "react-hot-loader": "4.13.0",
         "react-router": "5.2.0",
         "react-router-config": "5.1.1",
-        "react-router-dom": "5.2.0"
+        "react-router-dom": "5.2.0",
+        "winston": "3.3.3"
     }
 }

@@ -41,7 +41,8 @@ const renderFullPage = (html: string, scripts: string, styles: string, state: st
           <meta name="viewport" content="width=device-width, initial-scale=1.0" />
           <meta http-equiv="X-UA-Compatible" content="ie=edge" />
             <link rel="shortcut icon" href="data:image/x-icon;," type="image/x-icon"> 
-            <title>Baby diary</title>
+            <title>Baby o diary</title>
+            <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap" />
             ${styles}
         </head>
         <body>

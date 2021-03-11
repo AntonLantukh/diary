@@ -3,12 +3,12 @@ const path = require('path');
 const {assets, css, babel} = require('./modules');
 const plugins = require('./plugins');
 
-const {PATHS} = require('../constants');
+const {PATHS, REG_EXP} = require('../constants');
 
 module.exports = {
     mode: 'development',
     entry: {
-        main: path.join(PATHS.client, 'index.tsx'),
+        main: ['react-hot-loader/patch', path.join(PATHS.client, 'index.tsx')],
     },
     output: {
         filename: '[name].js',
@@ -35,15 +35,23 @@ module.exports = {
     plugins: plugins.client.dev,
     devServer: {
         host: 'localhost',
-        contentBase: PATHS.dist,
+        hot: true,
+        hotOnly: true,
+        contentBase: path.join(PATHS.dist, 'client'),
         compress: true,
+        liveReload: false,
         watchContentBase: true,
         progress: true,
         port: 9000,
-        hot: true,
+        writeToDisk: true,
+        watchOptions: {
+            aggregateTimeout: 3000,
+            poll: 8000,
+            ignored: REG_EXP.node_modules,
+        },
     },
     performance: {
-        hints: 'warning',
+        hints: false,
     },
     optimization: {
         nodeEnv: 'development',

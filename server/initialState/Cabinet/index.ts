@@ -3,11 +3,11 @@ import {ParsedQs} from 'qs';
 import CabinetState from 'shared/state/Cabinet';
 
 import {mockRecords} from 'shared/spec/mocks/record';
-import {mockAccount} from 'shared/spec/mocks/account';
+import {mockUser} from 'shared/spec/mocks/user';
 
 export default async (query: ParsedQs, pathName: string, pageName: string): Promise<CabinetState> => {
-    const account = await Promise.resolve(mockAccount);
+    const user = await Promise.resolve(mockUser);
     const records = await Promise.resolve(mockRecords);
 
-    return new CabinetState({records, account, common: {query, pathName, pageName}});
+    return new CabinetState({records, user, common: {query, pathName, pageName}});
 };

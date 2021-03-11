@@ -1,12 +1,12 @@
 import mongoose from 'mongoose';
 
+import {logger} from '../logger';
+
 mongoose.Promise = Promise;
 
-void mongoose.connect(process.env.MONGO);
+const database = mongoose.createConnection(process.env.MONGO);
 
-const db = mongoose.connection;
+void database.on('error', err => logger.error(err));
+void database.once('open', () => logger.info(process.env.MONGO));
 
-db.on('error', err => console.error(err));
-db.once('open', () => console.info(process.env.MONGO));
-
-export default db;
+export default database;

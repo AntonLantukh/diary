@@ -1,13 +1,13 @@
 import {ParsedQs} from 'qs';
 
-import MainState from 'shared/state/Main';
+import CabinetState from 'shared/state/Cabinet';
 
 import {mockRecords} from 'shared/spec/mocks/record';
-import {mockAccount} from 'shared/spec/mocks/account';
+import {mockUser} from 'shared/spec/mocks/user';
 
-export default async (query: ParsedQs, pathName: string, pageName: string): Promise<MainState> => {
-    const account = await Promise.resolve(mockAccount);
+export default async (query: ParsedQs, pathName: string, pageName: string): Promise<CabinetState> => {
+    const user = await Promise.resolve(mockUser);
     const records = await Promise.resolve(mockRecords);
 
-    return new MainState({records, account, common: {query, pathName, pageName}});
+    return new CabinetState({records, user, common: {query, pathName, pageName}});
 };

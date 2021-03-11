@@ -5,7 +5,7 @@ const nodeExternals = require('webpack-node-externals');
 const {babel, css} = require('./modules');
 const plugins = require('./plugins');
 
-const {PATHS} = require('../constants');
+const {PATHS, REG_EXP} = require('../constants');
 
 module.exports = {
     mode: 'development',
@@ -33,6 +33,10 @@ module.exports = {
             '˜': path.resolve(__dirname, '../../client'),
             '@': path.resolve(__dirname, '../../server'),
         },
+    },
+    watch: true,
+    watchOptions: {
+        ignored: REG_EXP.node_modules,
     },
     devtool: 'source-map',
     module: {

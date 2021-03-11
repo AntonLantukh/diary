@@ -1,26 +1,27 @@
 import {State} from 'shared/pages/Cabinet/typings';
-import {BaseMobxState, StateInterface} from 'shared/typings/state';
+import {StateInterface} from 'shared/typings/state';
 
-import AccountStore from 'shared/store/Account';
+import UserStore from 'shared/store/User';
 import RecordStore from 'shared/store/Record';
 import CommonStore from 'shared/store/Common';
 
 type OwnStore = {
-    account: AccountStore;
+    user: UserStore;
     records: RecordStore;
+    common: CommonStore;
 };
 
-export type CabinetStateT = BaseMobxState<OwnStore>;
+export type MainState = OwnStore;
 
-export default class CabinetState implements CabinetStateT, StateInterface {
-    account;
+export default class AccountState implements OwnStore, StateInterface {
+    user;
 
     records;
 
     common;
 
-    constructor({account, records, common}: State) {
-        this.account = new AccountStore(account);
+    constructor({user, records, common}: State) {
+        this.user = new UserStore(user);
         this.records = new RecordStore(records);
         this.common = new CommonStore(common);
     }

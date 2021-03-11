@@ -1,9 +1,9 @@
-import {Account} from 'shared/typings/account';
+import {User} from 'shared/typings/user';
 import {Record} from 'shared/typings/record';
 import {BaseState} from 'shared/typings/state';
 
 type OwnState = {
-    account: Account;
+    user: User;
     records: Record[];
 };
 
