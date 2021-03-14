@@ -1,26 +1,45 @@
-import UserModel from '../models/User';
-import {generatePassword, generateSalt} from '../utils/password';
+import {UserGetDto, UserCreateDto, UserGetDB, UserCreateDB, UserUpdateDto, UserId} from '../typings/User';
 
-import {User as UserType} from 'shared/typings/user';
+import {generateSalt, generatePassword} from '../utils/password';
+import UserModel from '../model/User';
+import userConverter from '../converter/User';
 
-type UserDaoType = {
-    createUser(user: User): void;
-    findUser(email: string): void;
-};
-
-class User implements UserDaoType {
-    async createUser({email, password}: UserType) {
+class UsersDao {
+    async saveUser(userDto: UserCreateDto): Promise<number> {
         const salt = await generateSalt();
-        const passwordHash = await generatePassword(salt, password);
+        const password = await generatePassword(salt, userDto.password);
 
-        await UserModel.create({email, passwordHash});
+        const user = await UserModel.create<UserCreateDB>(
+            userConverter.userCreateDtoToCreateDb(userDto, {password, salt}),
+        );
+
+        return user.id as number;
     }
 
-    async findUser(email: string) {
-        const user = await UserModel.findOne({email});
+    async getUsers(limit: number): Promise<UserGetDto[]> {
+        const users = ((await UserModel.find({}, null, {limit})) as unknown) as UserGetDB[];
+        const convertedUsers = users.map(userConverter.userGetDbToGetDto);
+
+        return convertedUsers;
+    }
+
+    async getUser(userId: UserId): Promise<UserGetDto> {
+        const user = ((await UserModel.findById(userId)) as unknown) as UserGetDto;
 
         return user;
     }
+
+    async updateUser(userDto: UserUpdateDto): Promise<UserGetDto> {
+        const updatedUser = ((await UserModel.findOneAndUpdate({id: userDto.id}, userDto)) as unknown) as UserGetDto;
+
+        return updatedUser;
+    }
+
+    async deleteUser(userId: UserId): Promise<number> {
+        await UserModel.findByIdAndDelete({id: userId});
+
+        return userId;
+    }
 }
 
-export default new User();
+export default new UsersDao();

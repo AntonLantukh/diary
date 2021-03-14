@@ -18,7 +18,7 @@ const schema = new Schema({
         type: String,
         trim: true,
     },
-    passwordHash: {
+    password: {
         type: String,
         required: true,
         select: false,

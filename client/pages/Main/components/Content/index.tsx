@@ -1,7 +1,7 @@
 import React, {FunctionComponent} from 'react';
 
-import LoginModal from '../LoginModal';
+import FormWrapper from '../FormWrapper';
 
-const Content: FunctionComponent = () => <LoginModal />;
+const Content: FunctionComponent = () => <FormWrapper />;
 
 export default Content;

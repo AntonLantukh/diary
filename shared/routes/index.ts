@@ -1,7 +1,7 @@
 import {ParsedQs} from 'qs';
 import {FunctionComponent} from 'react';
 
-import Main from 'client/pages/Main/components/LoginModal';
+import Main from '˜/pages/Main';
 import Cabinet from '˜/pages/Cabinet';
 
 import MainState from 'shared/state/Main';

@@ -21,7 +21,8 @@
         "react-hooks/exhaustive-deps": "warn",
         "react/prop-types": "off",
         "prettier/prettier": "error",
-        "json/*": "error"
+        "json/*": "error",
+        "no-console": "error"
     },
     "overrides": [
         {
@@ -39,7 +40,8 @@
             ],
             "plugins": ["prettier", "@typescript-eslint"],
             "rules": {
-                "@typescript-eslint/no-unused-vars": "error"
+                "@typescript-eslint/no-unused-vars": "error",
+                "@typescript-eslint/unbound-method": "off"
             }
         }
     ],
