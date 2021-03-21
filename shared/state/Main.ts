@@ -1,28 +1,32 @@
-import {State} from 'shared/pages/Cabinet/typings';
+import {State} from 'shared/pages/Main/typings';
+
 import {StateInterface} from 'shared/typings/state';
+
+import BaseState from 'shared/state/Base';
 
 import UserStore from 'shared/store/User';
 import RecordStore from 'shared/store/Record';
 import CommonStore from 'shared/store/Common';
+import I18nStore from 'shared/store/I18n';
 
 type OwnStore = {
     user: UserStore;
     records: RecordStore;
     common: CommonStore;
+    i18n: I18nStore;
 };
 
 export type MainState = OwnStore;
 
-export default class AccountState implements OwnStore, StateInterface {
+export default class Main extends BaseState implements OwnStore, StateInterface {
     user;
 
     records;
 
-    common;
+    constructor({user, records, common, i18n}: State) {
+        super({common, i18n});
 
-    constructor({user, records, common}: State) {
         this.user = new UserStore(user);
         this.records = new RecordStore(records);
-        this.common = new CommonStore(common);
     }
 }

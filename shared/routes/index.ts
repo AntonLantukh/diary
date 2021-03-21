@@ -10,9 +10,9 @@ import CabinetState from 'shared/state/Cabinet';
 import getInititalMainState from 'server/initialState/Main';
 import getInitialCabinetState from 'server/initialState/Cabinet';
 
-import {StateInterface} from 'shared/typings/state';
+import {BaseState} from 'shared/typings/state';
 
-export type InitialDataFunction = (query: ParsedQs, pathName: string, pageName: string) => Promise<StateInterface>;
+export type InitialDataFunction = (query: ParsedQs) => Promise<Record<string, unknown>>;
 
 interface Constructable<T> {
     new (args: any): T;
@@ -22,7 +22,7 @@ export type RouteConfig = {
     name: string;
     path: string;
     Component: FunctionComponent<Record<string, unknown>>;
-    State: Constructable<StateInterface>;
+    State: Constructable<BaseState>;
     getInitialData: InitialDataFunction;
 };
 

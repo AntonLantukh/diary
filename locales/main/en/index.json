@@ -1,0 +1,28 @@
+{
+    "register": {
+        "title": "Register",
+        "field": {
+            "email": "E-mail",
+            "password": "Password",
+            "passwordRepeat": "Repeat password"
+        },
+        "button": "Register",
+        "error": {
+            "email": "Empty e-mail",
+            "password": "Empty password",
+            "passwordRepeat": "Empty password"
+        }
+    },
+    "authorize": {
+        "title": "Authorize",
+        "field": {
+            "email": "E-mail",
+            "password": "Password"
+        },
+        "button": "Authorize",
+        "error": {
+            "email": "Empty e-mail",
+            "password": "Empty password"
+        }
+    }
+}

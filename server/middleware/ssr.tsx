@@ -1,7 +1,8 @@
 import path from 'path';
 import React from 'react';
 import {ParsedQs} from 'qs';
-
+import serialize from 'serialize-javascript';
+import {I18nextProvider} from 'react-i18next';
 import {enableStaticRendering} from 'mobx-react-lite';
 import {renderToString} from 'react-dom/server';
 import {StaticRouter} from 'react-router';
@@ -11,7 +12,15 @@ import {ChunkExtractor} from '@loadable/server';
 import {InitialDataFunction} from 'shared/routes';
 import {getMatchedPage} from 'shared/utils/router';
 
+import {I18nKeys} from 'shared/typings/i18n';
+
 import Base from 'shared/components/Base';
+import HtmlPage from '../components/HtmlPage';
+
+import {setupI18Next} from '../i18n';
+
+import CommonStore from 'shared/store/Common';
+import I18nStore from 'shared/store/I18n';
 
 type Context = {
     url?: string;
@@ -19,41 +28,27 @@ type Context = {
 
 enableStaticRendering(true);
 
-const loadInitialState = async (
-    getInitialData: InitialDataFunction | undefined,
-    pageName: string | undefined = '',
-    pathName: string | undefined = '',
+const loadInitialPageData = async (
+    getInitialData: InitialDataFunction,
+    pageName: string,
+    pathName: string,
     query: ParsedQs,
 ): Promise<Record<string, unknown>> => {
     if (!getInitialData) {
         return Promise.resolve({});
     }
 
-    return getInitialData(query, pathName, pageName);
+    return getInitialData(query);
 };
 
-const renderFullPage = (html: string, scripts: string, styles: string, state: string) => {
-    return `
-      <!DOCTYPE html>
-      <html lang="en">
-        <head>
-          <meta charset="UTF-8" />
-          <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-          <meta http-equiv="X-UA-Compatible" content="ie=edge" />
-            <link rel="shortcut icon" href="data:image/x-icon;," type="image/x-icon"> 
-            <title>Baby o diary</title>
-            <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap" />
-            ${styles}
-        </head>
-        <body>
-          <div id="root">${html}</div>
-          <script>
-            window.__INITIAL_STATE__ = ${state}
-          </script>
-          ${scripts}
-        </body>
-      </html>
-    `;
+const getState = async (req: Request, locale: string, i18nKeys: I18nKeys) => {
+    const {getInitialData, name, State} = getMatchedPage(req.path);
+
+    const initialPageData = await loadInitialPageData(getInitialData, name, req.path, req.query);
+    const common = new CommonStore({query: req.query, pathName: req.path, pageName: name});
+    const i18n = new I18nStore({locale, i18nKeys});
+
+    return new State({...initialPageData, i18n, common});
 };
 
 export default async (req: Request, res: Response): Promise<void> => {
@@ -63,22 +58,28 @@ export default async (req: Request, res: Response): Promise<void> => {
         publicPath: '/',
         entrypoints: ['main'],
     });
-    const scripts = chunkExtractor.getScriptTags();
-    const styles = chunkExtractor.getStyleTags();
+    const scripts = chunkExtractor.getScriptElements();
+    const styles = chunkExtractor.getStyleElements();
+
+    const locale = req.language;
+    const i18nServer = await setupI18Next(locale);
+    const i18nKeys = ({[locale]: i18nServer.getDataByLanguage(locale)} as unknown) as I18nKeys;
+    const state = await getState(req, locale, i18nKeys);
 
     const context: Context = {};
 
-    const {getInitialData, name, State} = getMatchedPage(req.path) || {};
-    const initialState = await loadInitialState(getInitialData, name, req.path, req.query);
-    const stringifiedState = JSON.stringify(initialState).replace(/</g, '\\u003c');
-    const state = State ? new State(initialState) : {};
-
-    const JSX = chunkExtractor.collectChunks(<Base {...{state}} />);
+    const JSX = chunkExtractor.collectChunks(
+        <I18nextProvider i18n={i18nServer}>
+            <Base {...{state}} />
+        </I18nextProvider>,
+    );
 
     const Html = (
-        <StaticRouter location={req.url} context={context}>
-            {JSX}
-        </StaticRouter>
+        <HtmlPage scripts={scripts} styles={styles} initialState={serialize(state)}>
+            <StaticRouter location={req.url} context={context}>
+                {JSX}
+            </StaticRouter>
+        </HtmlPage>
     );
 
     const reactHtml = renderToString(Html);
@@ -87,7 +88,7 @@ export default async (req: Request, res: Response): Promise<void> => {
         res.writeHead(301, {Location: context.url});
         res.end();
     } else {
-        res.write(renderFullPage(reactHtml, scripts, styles, stringifiedState));
+        res.write(reactHtml);
         res.end();
     }
 };

@@ -1,4 +1,5 @@
 import React, {FunctionComponent, useState, useCallback} from 'react';
+import {useTranslation} from 'react-i18next';
 
 import Card from '@material-ui/core/Card';
 import CardContent from '@material-ui/core/CardContent';
@@ -19,6 +20,7 @@ const TYPE = {
 };
 
 const FormWrapper: FunctionComponent = () => {
+    const {t} = useTranslation();
     const [formType, updateFormType] = useState(TYPE.AUTHORIZATION);
     const onChange = useCallback(
         (_, newType: keyof typeof TYPE) => {
@@ -38,8 +40,8 @@ const FormWrapper: FunctionComponent = () => {
                         variant="fullWidth"
                         onChange={onChange}
                     >
-                        <Tab label="Авторизация" value={TYPE.AUTHORIZATION} id={TYPE.AUTHORIZATION} />
-                        <Tab label="Регистрация" value={TYPE.REGISTRATION} id={TYPE.REGISTRATION} />
+                        <Tab label={t('main:authorize.title')} value={TYPE.AUTHORIZATION} id={TYPE.AUTHORIZATION} />
+                        <Tab label={t('main:register.title')} value={TYPE.REGISTRATION} id={TYPE.REGISTRATION} />
                     </Tabs>
                 </Grid>
                 <Grid item>
@@ -47,7 +49,9 @@ const FormWrapper: FunctionComponent = () => {
                         <Grid container spacing={3} direction="column">
                             <Grid item>
                                 <Typography color="textSecondary" variant="h5" component="h2" gutterBottom>
-                                    {formType === TYPE.AUTHORIZATION ? 'Авторизация' : 'Регистрация'}
+                                    {formType === TYPE.AUTHORIZATION
+                                        ? t('main:authorize.title')
+                                        : t('main:register.title')}
                                 </Typography>
                             </Grid>
                             <Grid>{formType === TYPE.AUTHORIZATION ? <Authorization /> : <Registration />}</Grid>

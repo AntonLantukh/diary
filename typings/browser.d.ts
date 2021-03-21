@@ -1,8 +1,8 @@
-import {Common} from 'shared/typings/common';
+import {BaseState} from 'shared/typings/state';
 
 declare global {
     interface Window {
-        __INITIAL_STATE__: string | Record<string, Common>;
+        __INITIAL_STATE__: string | BaseState;
         location: {
             pathname: string;
         };

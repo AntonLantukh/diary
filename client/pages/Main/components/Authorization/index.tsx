@@ -1,6 +1,7 @@
 import React, {FunctionComponent, useCallback} from 'react';
 import {useForm} from 'react-hook-form';
 import {ErrorMessage} from '@hookform/error-message';
+import {useTranslation} from 'react-i18next';
 
 import TextField from '@material-ui/core/TextField';
 import FormControl from '@material-ui/core/FormControl';
@@ -12,6 +13,7 @@ import css from './style.css';
 
 const Authorization: FunctionComponent = () => {
     const {register, handleSubmit, errors} = useForm<AuthorizationForm>({});
+    const {t} = useTranslation();
 
     const onSubmit = useCallback((form: AuthorizationForm) => {
         console.log(form);
@@ -22,8 +24,8 @@ const Authorization: FunctionComponent = () => {
             <FormControl fullWidth>
                 <TextField
                     name="email"
-                    inputRef={register({required: 'Укажите email'})}
-                    label="Электронная почта"
+                    inputRef={register({required: t('main:authorize.error.email')})}
+                    label={t('main:authorize.field.email')}
                     variant="outlined"
                     type="email"
                     error={Boolean(errors.email)}
@@ -35,8 +37,8 @@ const Authorization: FunctionComponent = () => {
             <FormControl fullWidth>
                 <TextField
                     name="password"
-                    inputRef={register({required: 'Укажите пароль'})}
-                    label="Пароль"
+                    inputRef={register({required: t('main:authorize.error.password')})}
+                    label={t('main:authorize.field.password')}
                     variant="outlined"
                     type="password"
                     error={Boolean(errors.password)}
@@ -46,7 +48,7 @@ const Authorization: FunctionComponent = () => {
                 </div>
             </FormControl>
             <Button variant="contained" color="primary" onClick={handleSubmit(onSubmit)}>
-                Ввойти
+                {t('main:authorize.button')}
             </Button>
         </form>
     );

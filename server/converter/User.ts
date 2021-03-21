@@ -7,15 +7,15 @@ type ParamsToDb = {
 
 class UserConverter {
     userGetDbToGetDto(userDb: UserGetDB): UserGetDto {
-        const {id, email, name, surname} = userDb;
+        const {_id, email, name, surname} = userDb;
 
-        return {id, email, name, surname};
+        return {id: _id, email, name, surname};
     }
 
     userCreateDtoToCreateDb(userDto: UserCreateDto, {password, salt}: ParamsToDb): UserCreateDB {
         const {email} = userDto;
 
-        return {email, password, salt};
+        return {email, password, salt, isArchived: false};
     }
 }
 

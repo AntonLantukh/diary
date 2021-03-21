@@ -1,4 +1,3 @@
-import path from 'path';
 import {format, transports, createLogger} from 'winston';
 import expressWinston from 'express-winston';
 

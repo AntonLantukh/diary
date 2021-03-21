@@ -20,7 +20,7 @@ const schema = new Schema({
     },
     password: {
         type: String,
-        required: true,
+        required: 'Password should not be blank',
         select: false,
     },
     salt: {

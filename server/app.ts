@@ -10,6 +10,7 @@ import {CommonRoutesConfig} from './routes/Common';
 
 import ssrMiddleware from './middleware/ssr';
 import errorMiddleware from './middleware/error';
+import detectLocale from './middleware/locale';
 
 import {routeLogger, errorLogger} from './logger';
 
@@ -19,13 +20,14 @@ dotenv.config();
 
 const app = express();
 
-app.use(routeLogger);
-// eslint-disable-next-line @typescript-eslint/no-unsafe-call
-app.use(cookieParser());
-app.use(bodyParser.urlencoded({extended: true}));
-app.use(bodyParser.json());
 app.use(compression());
 app.use(express.static(path.resolve(__dirname, '../dist/client')));
+
+app.use(cookieParser());
+app.use(detectLocale);
+app.use(routeLogger);
+app.use(bodyParser.urlencoded({extended: true}));
+app.use(bodyParser.json());
 app.use(errorLogger);
 
 routes.push(new UserRoutes(app));

@@ -10,15 +10,21 @@ const HtmlPage: FunctionComponent<Props> = ({scripts, styles, children, initialS
     <html>
         <head>
             <meta charSet="UTF-8" />
-            <meta name="viewport" content="width=device-width,minimum-scale=1,maximum-scale=1,initial-scale=1" />
+            <meta name="viewport" content="width=device-width, initial-scale=1.0" />
             <meta httpEquiv="X-UA-Compatible" content="ie=edge" />
-            <link rel="shortcut icon" type="image/png" href="/images/favicon.jpg" />
-            <title>Baby diary</title>
+            <link rel="shortcut icon" href="data:image/x-icon;," type="image/x-icon" />
+            <title>Baby o diary</title>
+            <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap" />
             {styles}
         </head>
         <body>
             <div id="root">{children}</div>
-            <script>window.__INITIAL_STATE__={initialState}</script>
+            <script
+                defer
+                dangerouslySetInnerHTML={{
+                    __html: `window.__INITIAL_STATE__=${initialState}`,
+                }}
+            />
             {scripts}
         </body>
     </html>

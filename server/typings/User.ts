@@ -6,10 +6,11 @@ export type UserCreateDB = {
     email: string;
     name?: string;
     surname?: string;
+    isArchived: boolean;
 };
 
 export type UserGetDB = {
-    id: UserId;
+    _id: UserId;
     password: string;
     salt: string;
     email: string;

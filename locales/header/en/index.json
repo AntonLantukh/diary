@@ -1,0 +1,11 @@
+{
+    "menu": {
+        "cabinet": "Cabinet",
+        "main": "Main"
+    },
+    "locale": {
+        "label": "Language",
+        "ru": "Russian",
+        "en": "English"
+    }
+}

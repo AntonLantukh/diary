@@ -1,0 +1,28 @@
+{
+    "register": {
+        "title": "Зарегистрироваться",
+        "field": {
+            "email": "Электронная почта",
+            "password": "Пароль",
+            "passwordRepeat": "Повторите пароль"
+        },
+        "button": "Зарегистрироваться",
+        "error": {
+            "email": "Укажите e-mail",
+            "password": "Укажите пароль",
+            "passwordRepeat": "Укажите пароль"
+        }
+    },
+    "authorize": {
+        "title": "Ввойти",
+        "field": {
+            "email": "Электронная почта",
+            "password": "Пароль"
+        },
+        "button": "Ввойти",
+        "error": {
+            "email": "Укажите e-mail",
+            "password": "Укажите пароль"
+        }
+    }
+}

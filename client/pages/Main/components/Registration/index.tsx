@@ -1,8 +1,6 @@
 import React, {FunctionComponent, useCallback} from 'react';
 import {useForm} from 'react-hook-form';
-
-import {MainState} from 'shared/state/Main';
-import {useMobxState} from 'client/hooks/useMobxState';
+import {useTranslation} from 'react-i18next';
 
 import TextField from '@material-ui/core/TextField';
 import FormControl from '@material-ui/core/FormControl';
@@ -13,7 +11,7 @@ import {RegistrationForm} from '../../typings';
 import css from './style.css';
 
 const Registration: FunctionComponent = () => {
-    const {user} = useMobxState() as MainState;
+    const {t} = useTranslation();
     const {register, handleSubmit} = useForm<RegistrationForm>({});
     const onSubmit = useCallback(async (form: RegistrationForm) => {
         await fetch('http://localhost:3000/api/user', {
@@ -30,29 +28,29 @@ const Registration: FunctionComponent = () => {
             <FormControl fullWidth>
                 <TextField
                     name="email"
-                    inputRef={register({required: 'Укажите email'})}
-                    label="Электронная почта"
+                    inputRef={register({required: t('main:register.error.email')})}
+                    label={t('main:register.field.email')}
                     variant="outlined"
                 />
             </FormControl>
             <FormControl fullWidth>
                 <TextField
                     name="password"
-                    inputRef={register({required: 'Укажите пароль'})}
-                    label="Пароль"
+                    inputRef={register({required: t('main:register.error.password')})}
+                    label={t('main:register.field.password')}
                     variant="outlined"
                 />
             </FormControl>
             <FormControl fullWidth>
                 <TextField
                     name="passwordConfirm"
-                    inputRef={register({required: 'Укажите пароль'})}
-                    label="Повторите пароль"
+                    inputRef={register({required: t('main:register.error.passwordRepeat')})}
+                    label={t('main:register.field.passwordRepeat')}
                     variant="outlined"
                 />
             </FormControl>
             <Button type="submit" variant="contained" color="primary" onSubmit={handleSubmit(onSubmit)}>
-                Зарегистрироваться
+                {t('main:register.button')}
             </Button>
         </form>
     );

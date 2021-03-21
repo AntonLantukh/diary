@@ -4,7 +4,7 @@ import {action, makeObservable, observable} from 'mobx';
 
 import {Common} from 'shared/typings/common';
 
-interface CommonStoreInterface extends Common {
+export interface CommonStoreInterface extends Common {
     initialize(): void;
 }
 
