@@ -5,8 +5,6 @@ export type AuthorizationForm = {
 
 export type RegistrationForm = {
     email: string;
-    name: string;
-    surname: string;
     password: string;
     passwordConfirm: string;
 };

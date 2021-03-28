@@ -1,13 +1,10 @@
-import {State} from 'shared/pages/Main/typings';
-
-import {StateInterface, BaseMobxStateExtended, BaseStateExtended} from 'shared/typings/state';
+import {StateInterface, BaseStateExtened} from 'shared/typings/state';
+import {State} from 'shared/pages/Cabinet/typings';
 
 import BaseState from 'shared/state/Base';
 
 import UserStore from 'shared/store/User';
 import RecordStore from 'shared/store/Record';
-import CommonStore from 'shared/store/Common';
-import I18nStore from 'shared/store/I18n';
 
 type OwnStore = {
     user: UserStore;
@@ -21,7 +18,7 @@ export default class Cabinet extends BaseState implements StateInterface {
 
     records;
 
-    constructor({user, records, common, i18n}: BaseMobxStateExtended<OwnStore>) {
+    constructor({user, records, i18n, common}: BaseStateExtened<State>) {
         super({common, i18n});
 
         this.user = new UserStore(user);

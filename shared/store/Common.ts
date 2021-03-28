@@ -1,11 +1,12 @@
 import {ParsedQs} from 'qs';
 
-import {action, makeObservable, observable} from 'mobx';
+import {action, computed, makeObservable, observable} from 'mobx';
 
 import {Common} from 'shared/typings/common';
 
 export interface CommonStoreInterface extends Common {
     initialize(): void;
+    keysetName: string;
 }
 
 type Params = {
@@ -31,10 +32,15 @@ export default class CommonStore implements CommonStoreInterface {
         makeObservable(this, {
             isInitialized: observable,
             initialize: action,
+            keysetName: computed,
         });
     }
 
     initialize(): void {
         this.isInitialized = true;
+    }
+
+    get keysetName(): string {
+        return this.pageName.toLocaleLowerCase();
     }
 }

@@ -1,6 +1,5 @@
+import {StateInterface, BaseStateExtened} from 'shared/typings/state';
 import {State} from 'shared/pages/Main/typings';
-
-import {StateInterface} from 'shared/typings/state';
 
 import BaseState from 'shared/state/Base';
 
@@ -23,7 +22,7 @@ export default class Main extends BaseState implements OwnStore, StateInterface 
 
     records;
 
-    constructor({user, records, common, i18n}: State) {
+    constructor({user, records, common, i18n}: BaseStateExtened<State>) {
         super({common, i18n});
 
         this.user = new UserStore(user);

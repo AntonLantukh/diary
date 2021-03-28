@@ -6,6 +6,8 @@ import bodyParser from 'body-parser';
 import cookieParser from 'cookie-parser';
 
 import {UserRoutes} from './routes/User';
+import {LocaleRoutes} from './routes/Locale';
+
 import {CommonRoutesConfig} from './routes/Common';
 
 import ssrMiddleware from './middleware/ssr';
@@ -31,6 +33,8 @@ app.use(bodyParser.json());
 app.use(errorLogger);
 
 routes.push(new UserRoutes(app));
+routes.push(new LocaleRoutes(app));
+
 app.get('*', [ssrMiddleware]);
 
 app.use(errorMiddleware);

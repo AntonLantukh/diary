@@ -16,6 +16,7 @@ const Authorization: FunctionComponent = () => {
     const {t} = useTranslation();
 
     const onSubmit = useCallback((form: AuthorizationForm) => {
+        // eslint-disable-next-line no-console
         console.log(form);
     }, []);
 
@@ -24,6 +25,7 @@ const Authorization: FunctionComponent = () => {
             <FormControl fullWidth>
                 <TextField
                     name="email"
+                    // @ts-ignore
                     inputRef={register({required: t('main:authorize.error.email')})}
                     label={t('main:authorize.field.email')}
                     variant="outlined"
@@ -37,6 +39,7 @@ const Authorization: FunctionComponent = () => {
             <FormControl fullWidth>
                 <TextField
                     name="password"
+                    // @ts-ignore
                     inputRef={register({required: t('main:authorize.error.password')})}
                     label={t('main:authorize.field.password')}
                     variant="outlined"

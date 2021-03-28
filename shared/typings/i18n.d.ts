@@ -1,5 +1,5 @@
 export type I18nKeys = {
-    string: Record<string, string | Record<string, string>>;
+    [locale: string]: Record<string, string | Record<string, string>>;
 };
 
 export type I18n = {

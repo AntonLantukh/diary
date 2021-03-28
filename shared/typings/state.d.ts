@@ -16,6 +16,6 @@ export type BaseMobxState = {
     i18n: I18nStoreInterface;
 };
 
-export type BaseStateExtened<T> = T & Base;
+export type BaseStateExtened<T> = BaseState & T;
 export type BaseMobxStateExtended<T> = BaseMobxState & T;
 export type StateInterface = Record<unknown, IObservableValue<unknown>>;

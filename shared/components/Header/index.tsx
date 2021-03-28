@@ -1,8 +1,9 @@
-import React, {FunctionComponent, useContext, useCallback, ChangeEvent} from 'react';
+import React, {FunctionComponent, useContext, useCallback, ChangeEvent, useState} from 'react';
 import {Link as RouteLink} from 'react-router-dom';
-import Cookie from 'js-cookie';
 import {observer} from 'mobx-react-lite';
 import {useTranslation} from 'react-i18next';
+import Cookie from 'js-cookie';
+import {getLocale} from 'shared/resolvers/locale';
 
 import Select from '@material-ui/core/Select';
 import FormControl from '@material-ui/core/FormControl';
@@ -12,19 +13,29 @@ import Link from '@material-ui/core/Link';
 import StateContext from 'shared/context/StateContext';
 import {BaseMobxState} from 'shared/typings/state';
 
+import {COMMON_NAMESPACES} from 'shared/constants/i18n';
+
 const Header: FunctionComponent = observer(() => {
     const {
-        i18n: {changeLocale, locale},
+        common: {keysetName},
     } = useContext(StateContext) as BaseMobxState;
-    const {t} = useTranslation();
+    const {t, i18n} = useTranslation();
+    const [locale, changeLocale] = useState(i18n.language);
 
     const onChange = useCallback(
-        (evt: ChangeEvent<{name?: string | undefined; value: unknown}>) => {
+        async (evt: ChangeEvent<{name?: string | undefined; value: unknown}>) => {
             const value = evt.target.value as string;
-            Cookie.set('locale', value);
+
+            if (!i18n.hasResourceBundle(value, keysetName)) {
+                const keys = await getLocale({locale: value, page: keysetName});
+                i18n.addResourceBundle(value, keysetName, keys, true);
+                COMMON_NAMESPACES.forEach(set => i18n.addResourceBundle(value, set, keys, true));
+            }
+            await i18n.changeLanguage(value);
             changeLocale(value);
+            Cookie.set('locale', value);
         },
-        [changeLocale],
+        [changeLocale, i18n, keysetName],
     );
 
     return (

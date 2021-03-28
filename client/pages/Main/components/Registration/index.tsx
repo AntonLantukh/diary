@@ -6,6 +6,8 @@ import TextField from '@material-ui/core/TextField';
 import FormControl from '@material-ui/core/FormControl';
 import Button from '@material-ui/core/Button';
 
+import {registerUser} from 'shared/resolvers/registration';
+
 import {RegistrationForm} from '../../typings';
 
 import css from './style.css';
@@ -14,13 +16,7 @@ const Registration: FunctionComponent = () => {
     const {t} = useTranslation();
     const {register, handleSubmit} = useForm<RegistrationForm>({});
     const onSubmit = useCallback(async (form: RegistrationForm) => {
-        await fetch('http://localhost:3000/api/user', {
-            method: 'POST',
-            body: JSON.stringify(form),
-            headers: {
-                'Content-Type': 'application/json',
-            },
-        });
+        await registerUser(form);
     }, []);
 
     return (
@@ -28,6 +24,7 @@ const Registration: FunctionComponent = () => {
             <FormControl fullWidth>
                 <TextField
                     name="email"
+                    // @ts-ignore
                     inputRef={register({required: t('main:register.error.email')})}
                     label={t('main:register.field.email')}
                     variant="outlined"
@@ -36,6 +33,7 @@ const Registration: FunctionComponent = () => {
             <FormControl fullWidth>
                 <TextField
                     name="password"
+                    // @ts-ignore
                     inputRef={register({required: t('main:register.error.password')})}
                     label={t('main:register.field.password')}
                     variant="outlined"
@@ -44,6 +42,7 @@ const Registration: FunctionComponent = () => {
             <FormControl fullWidth>
                 <TextField
                     name="passwordConfirm"
+                    // @ts-ignore
                     inputRef={register({required: t('main:register.error.passwordRepeat')})}
                     label={t('main:register.field.passwordRepeat')}
                     variant="outlined"
