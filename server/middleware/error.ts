@@ -18,7 +18,7 @@ type MongoDuplicateError = {
     keyValue: Record<string, number | string>;
 };
 
-const handleDuplicateKeyError = (err: MongoDuplicateError, res: Response) => {
+export const handleDuplicateKeyError = (err: MongoDuplicateError, res: Response): void => {
     const code = 409;
     const errors = Object.keys(err.keyValue || []).map(key => ({
         field: key,
@@ -36,7 +36,7 @@ const handleDuplicateKeyError = (err: MongoDuplicateError, res: Response) => {
     res.status(code).send(errorObject);
 };
 
-const handleValidationError = (err: Error.ValidationError, res: Response) => {
+export const handleValidationError = (err: Error.ValidationError, res: Response): void => {
     const code = 400;
     const errors = Object.values(err.errors).map(({path, kind, reason, value}) => ({
         field: path,

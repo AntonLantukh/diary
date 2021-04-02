@@ -31,14 +31,17 @@
     "include": [
         "client/**/*.js",
         "client/**/*.ts",
+        "client/**/*.spec.ts",
         "client/**/*.tsx",
         "server/**/*.ts",
+        "server/**/*.spec.ts",
         "server/**/*.tsx",
         "server/**/*.js",
         "typings/**/*.ts",
         "shared/**/*.ts",
+        "shared/**/*.spec.ts",
         "shared/**/*.tsx",
         "shared/**/*.js"
     ],
-    "exclude": ["node_modules", "**/*.spec.ts"]
+    "exclude": ["node_modules"]
 }

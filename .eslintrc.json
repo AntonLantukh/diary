@@ -10,9 +10,10 @@
         "plugin:react/recommended",
         "plugin:json/recommended",
         "prettier/react",
+        "plugin:jest/recommended",
         "plugin:prettier/recommended"
     ],
-    "plugins": ["react", "react-hooks", "import", "json", "prettier"],
+    "plugins": ["react", "react-hooks", "import", "jest", "json", "prettier"],
     "rules": {
         "lines-between-class-members": 2,
         "@typescript-eslint/explicit-function-return-type": "off",
