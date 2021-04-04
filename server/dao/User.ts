@@ -1,6 +1,6 @@
 import {UserGetDto, UserCreateDto, UserGetDB, UserCreateDB, UserUpdateDto, UserId} from '../typings/User';
 
-import {generateSalt, generatePassword} from '../utils/password';
+import {generatePassword} from '../utils/password';
 import {logger} from '../logger';
 
 import UserModel from '../model/User';
@@ -8,11 +8,9 @@ import userConverter from '../converter/User';
 
 class UsersDao {
     async saveUser(userDto: UserCreateDto): Promise<number> {
-        const salt = await generateSalt();
-        const password = await generatePassword(salt, userDto.password);
-
+        const password = await generatePassword(userDto.password);
         const user = await UserModel.create<UserCreateDB>(
-            userConverter.userCreateDtoToCreateDb(userDto, {password, salt}),
+            userConverter.userCreateDtoToCreateDb(userDto, {password}),
         ).then(user => {
             logger.info(`Created user ${JSON.stringify(user)}`);
 
@@ -37,9 +35,25 @@ class UsersDao {
         return convertedUsers;
     }
 
-    async getUser(userId: UserId): Promise<UserGetDto> {
+    async getUserById(userId: UserId): Promise<UserGetDto> {
         const user = ((await UserModel.findById(userId).then(user => {
-            logger.info(`Found user ${JSON.stringify(user)}`);
+            if (user) {
+                logger.info(`Found user ${JSON.stringify(user)} by userId ${userId}`);
+            } else {
+                logger.warn(`User by userId ${userId} not found`);
+            }
+        })) as unknown) as UserGetDto;
+
+        return user;
+    }
+
+    async getUserByEmail(email: string): Promise<UserGetDto> {
+        const user = ((await UserModel.findOne({email}).then(user => {
+            if (user) {
+                logger.info(`Found user ${JSON.stringify(user)} by email ${email}`);
+            } else {
+                logger.warn(`User by email ${email} not found`);
+            }
 
             return user;
         })) as unknown) as UserGetDto;
@@ -57,7 +71,7 @@ class UsersDao {
         return updatedUser;
     }
 
-    async deleteUser(userId: UserId): Promise<number> {
+    async deleteUser(userId: UserId): Promise<UserId> {
         await UserModel.findByIdAndDelete({id: userId}).then(user => {
             logger.info(`Deleted user ${JSON.stringify(user)}`);
 

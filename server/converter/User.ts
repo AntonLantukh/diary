@@ -2,20 +2,19 @@ import {UserCreateDB, UserGetDB, UserGetDto, UserCreateDto} from '../typings/Use
 
 type ParamsToDb = {
     password: string;
-    salt: string;
 };
 
 class UserConverter {
     userGetDbToGetDto(userDb: UserGetDB): UserGetDto {
-        const {_id, email, name, surname} = userDb;
+        const {_id, email, name, password, surname} = userDb;
 
-        return {id: _id, email, name, surname};
+        return {id: _id, email, password, name, surname};
     }
 
-    userCreateDtoToCreateDb(userDto: UserCreateDto, {password, salt}: ParamsToDb): UserCreateDB {
+    userCreateDtoToCreateDb(userDto: UserCreateDto, {password}: ParamsToDb): UserCreateDB {
         const {email} = userDto;
 
-        return {email, password, salt, isArchived: false};
+        return {email, password, isArchived: false};
     }
 }
 

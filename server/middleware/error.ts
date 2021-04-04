@@ -7,7 +7,7 @@ import {ServerError, ErrorTypeEnum, RequiredTypeEnum} from 'shared/typings/error
 import {logger} from '../logger';
 
 // MongoDatabase has code field
-type ExtendedError = Error & {code: number};
+type ExtendedError = Error & {code: number; statusCode: number};
 
 type MongoDuplicateError = {
     driver: boolean;
@@ -63,11 +63,18 @@ export default (
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     _next: NextFunction,
 ): void => {
-    logger.error(JSON.stringify(err));
+    logger.error(err);
+
     try {
+        if (err.statusCode === 400) {
+            res.status(err.statusCode).send(err);
+            return;
+        }
+
         if (err.name === 'ValidationError') {
             handleValidationError((err as unknown) as Error.ValidationError, res);
         }
+
         if (err.code && err.code == 11000) {
             handleDuplicateKeyError((err as unknown) as MongoDuplicateError, res);
         }

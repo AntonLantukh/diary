@@ -1,19 +1,23 @@
-import {Application} from 'express';
+import {Router} from 'express';
 
-export abstract class CommonRoutesConfig {
-    app: Application;
+import {logger} from '../logger';
+
+export abstract class CommonRouterConfig {
+    router: Router;
 
     name: string;
 
-    constructor(app: Application, name: string) {
-        this.app = app;
+    constructor(router: Router, name: string) {
+        this.router = router;
         this.name = name;
         this.configureRoutes();
+
+        logger.info(`${this.getName()} initialized`);
     }
 
     getName(): string {
         return this.name;
     }
 
-    abstract configureRoutes(): Application;
+    abstract configureRoutes(): Router;
 }

@@ -1,18 +1,22 @@
-import {Application} from 'express';
+import {Router} from 'express';
 
-import {CommonRoutesConfig} from './Common';
+import {CommonRouterConfig} from './Common';
 
 import localeController from '../controller/Locale';
 import {handleAsync} from '../middleware/async';
 
-export class LocaleRoutes extends CommonRoutesConfig {
-    constructor(app: Application) {
-        super(app, 'LocaleRoutes');
+export class LocaleRouter extends CommonRouterConfig {
+    constructor() {
+        const router = Router();
+
+        super(router, 'LocaleRouter');
     }
 
-    configureRoutes(): Application {
-        this.app.route('/api/locale').get(handleAsync(localeController.getLocaleByPage));
+    configureRoutes(): Router {
+        this.router.route('/').get(handleAsync(localeController.getLocaleByPage));
 
-        return this.app;
+        return this.router;
     }
 }
+
+export default new LocaleRouter();

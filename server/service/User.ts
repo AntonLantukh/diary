@@ -7,7 +7,7 @@ class UsersService {
         return userDao.saveUser(userDto);
     }
 
-    async deleteById(userId: UserId): Promise<number> {
+    async deleteById(userId: UserId): Promise<UserId> {
         return userDao.deleteUser(userId);
     }
 
@@ -20,7 +20,11 @@ class UsersService {
     }
 
     async readById(userId: UserId): Promise<UserGetDto> {
-        return userDao.getUser(userId);
+        return userDao.getUserById(userId);
+    }
+
+    async readByEmail(email: string): Promise<UserGetDto> {
+        return userDao.getUserByEmail(email);
     }
 }
 

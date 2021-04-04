@@ -8,6 +8,7 @@ const schema = new Schema({
         index: true,
         trim: true,
         required: 'E-mail should not be blank',
+        lowerCase: true,
         unique: 'Email already existst',
     },
     name: {
@@ -21,12 +22,6 @@ const schema = new Schema({
     password: {
         type: String,
         required: 'Password should not be blank',
-        select: false,
-    },
-    salt: {
-        type: String,
-        required: true,
-        select: false,
     },
 });
 

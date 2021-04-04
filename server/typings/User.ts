@@ -1,8 +1,7 @@
-export type UserId = number;
+export type UserId = string;
 
 export type UserCreateDB = {
     password: string;
-    salt: string;
     email: string;
     name?: string;
     surname?: string;
@@ -22,7 +21,12 @@ export type UserGetDB = {
 export type UserCreateDto = {
     email: string;
     password: string;
-    surname?: string;
+    passwordConfirm: string;
+};
+
+export type UserLoginDto = {
+    email: string;
+    password: string;
 };
 
 export type UserUpdateDto = {
@@ -36,6 +40,7 @@ export type UserUpdateDto = {
 export type UserGetDto = {
     id: UserId;
     email: string;
+    password: string;
     name?: string;
     surname?: string;
 };

@@ -5,18 +5,17 @@ import dotenv from 'dotenv';
 import bodyParser from 'body-parser';
 import cookieParser from 'cookie-parser';
 
-import {UserRoutes} from './routes/User';
-import {LocaleRoutes} from './routes/Locale';
-
-import {CommonRoutesConfig} from './routes/Common';
+import localeRouter from './routes/Locale';
+import userRouter from './routes/User';
+import authRouter from './routes/Auth';
 
 import ssrMiddleware from './middleware/ssr';
 import errorMiddleware from './middleware/error';
 import detectLocale from './middleware/locale';
+import authMiddleware from './middleware/Auth';
+import {handleAsync} from './middleware/async';
 
 import {routeLogger, errorLogger} from './logger';
-
-const routes: Array<CommonRoutesConfig> = [];
 
 dotenv.config();
 
@@ -32,10 +31,12 @@ app.use(bodyParser.urlencoded({extended: true}));
 app.use(bodyParser.json());
 app.use(errorLogger);
 
-routes.push(new UserRoutes(app));
-routes.push(new LocaleRoutes(app));
+app.use('/api/user', userRouter.configureRoutes());
+app.use('/api/auth', authRouter.configureRoutes());
+app.use('/api/locale', localeRouter.configureRoutes());
 
-app.get('*', [ssrMiddleware]);
+app.get('/cabinet', [handleAsync(authMiddleware.validateAccessToken), ssrMiddleware]);
+app.get('/main', [ssrMiddleware]);
 
 app.use(errorMiddleware);
 

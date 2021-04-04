@@ -1,28 +1,13 @@
-import crypto from 'crypto';
+import bcrypt from 'bcrypt';
+import process from 'process';
 
-import config from '../config';
+export const generatePassword = async (password: string): Promise<string> => {
+    const salt = await bcrypt.genSalt(Number(process.env.SALT_LENGTH));
+    const hashedPassword = await bcrypt.hash(password, salt);
 
-export const generatePassword = (salt: string, password: string): Promise<string> => {
-    return new Promise((resolve, reject) => {
-        crypto.pbkdf2(
-            password,
-            salt,
-            config.crypto.iterations,
-            config.crypto.length,
-            config.crypto.digest,
-            (err, key) => {
-                if (err) return reject(err);
-                resolve(key.toString('hex'));
-            },
-        );
-    });
+    return hashedPassword;
 };
 
-export const generateSalt = (): Promise<string> => {
-    return new Promise((resolve, reject) => {
-        crypto.randomBytes(config.crypto.length, (err, buffer) => {
-            if (err) return reject(err);
-            resolve(buffer.toString('hex'));
-        });
-    });
+export const checkPassword = (passwordIncoming: string, passwordSaved: string): Promise<boolean> => {
+    return bcrypt.compare(passwordIncoming, passwordSaved);
 };
