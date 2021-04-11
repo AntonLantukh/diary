@@ -3,16 +3,18 @@ import {FunctionComponent} from 'react';
 
 import Main from '˜/pages/Main';
 import Cabinet from '˜/pages/Cabinet';
+import NotFound from '˜/pages/NotFound';
 
 import MainState from 'shared/state/Main';
 import CabinetState from 'shared/state/Cabinet';
+import BaseState from 'shared/state/Base';
 
 import getInititalMainState from 'server/initialState/Main';
 import getInitialCabinetState from 'server/initialState/Cabinet';
 
-import {BaseState} from 'shared/typings/state';
+import {BaseState as BaseStateT} from 'shared/typings/state';
 
-export type InitialDataFunction = (query: ParsedQs) => Promise<Record<string, unknown>>;
+export type InitialDataFunction = (query: ParsedQs) => Promise<Record<string | never, unknown>>;
 
 interface Constructable<T> {
     new (args: any): T;
@@ -22,8 +24,9 @@ export type RouteConfig = {
     name: string;
     path: string;
     Component: FunctionComponent<Record<string, unknown>>;
-    State: Constructable<BaseState>;
-    getInitialData: InitialDataFunction;
+    State: Constructable<BaseStateT>;
+    getInitialData?: InitialDataFunction;
+    privateRoute: boolean;
 };
 
 export const routes: RouteConfig[] = [
@@ -33,19 +36,21 @@ export const routes: RouteConfig[] = [
         Component: Cabinet,
         getInitialData: getInitialCabinetState,
         State: CabinetState,
+        privateRoute: true,
     },
     {
         name: 'Main',
-        path: '/',
+        path: '/main',
         Component: Main,
         getInitialData: getInititalMainState,
         State: MainState,
+        privateRoute: false,
     },
     {
         name: 'NotFound',
         path: '*',
-        Component: Main,
-        getInitialData: getInititalMainState,
-        State: CabinetState,
+        Component: NotFound,
+        State: BaseState,
+        privateRoute: false,
     },
 ];

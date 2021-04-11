@@ -7,6 +7,8 @@ import TextField from '@material-ui/core/TextField';
 import FormControl from '@material-ui/core/FormControl';
 import Button from '@material-ui/core/Button';
 
+import {loginUser} from 'shared/resolvers/registration';
+
 import {AuthorizationForm} from '../../typings';
 
 import css from './style.css';
@@ -15,9 +17,8 @@ const Authorization: FunctionComponent = () => {
     const {register, handleSubmit, errors} = useForm<AuthorizationForm>({});
     const {t} = useTranslation();
 
-    const onSubmit = useCallback((form: AuthorizationForm) => {
-        // eslint-disable-next-line no-console
-        console.log(form);
+    const onSubmit = useCallback(async (form: AuthorizationForm) => {
+        await loginUser(form);
     }, []);
 
     return (
@@ -25,7 +26,7 @@ const Authorization: FunctionComponent = () => {
             <FormControl fullWidth>
                 <TextField
                     name="email"
-                    // @ts-ignore
+                    // @ts-expect-error
                     inputRef={register({required: t('main:authorize.error.email')})}
                     label={t('main:authorize.field.email')}
                     variant="outlined"
@@ -39,7 +40,7 @@ const Authorization: FunctionComponent = () => {
             <FormControl fullWidth>
                 <TextField
                     name="password"
-                    // @ts-ignore
+                    // @ts-expect-error
                     inputRef={register({required: t('main:authorize.error.password')})}
                     label={t('main:authorize.field.password')}
                     variant="outlined"

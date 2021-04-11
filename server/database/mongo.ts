@@ -2,12 +2,11 @@ import mongoose from 'mongoose';
 import process from 'process';
 
 import {logger} from '../logger';
-import config from '../config';
 
 mongoose.Promise = Promise;
 
-const connection = mongoose.createConnection(config.MONGODB_URI, {
-    dbName: config.DB_NAME,
+const connection = mongoose.createConnection(process.env.MONGODB_URI, {
+    dbName: process.env.MONGODB_NAME,
     useNewUrlParser: true,
     useUnifiedTopology: true,
     useFindAndModify: true,
@@ -19,9 +18,9 @@ if (process.env.NODE_ENV === 'development') {
 }
 
 void connection.on('error', err => logger.error(err));
-void connection.once('open', () => logger.info(`Connection to ${config.MONGODB_URI} opened`));
-void connection.once('connected', () => logger.info(`Connected to database`));
-void connection.once('disconnected', () => logger.info(`Connection to database closed`));
+void connection.once('open', () => logger.info(`Connection to ${process.env.MONGODB_URI} opened`));
+void connection.once('connected', () => logger.info(`Connected to mongo database`));
+void connection.once('disconnected', () => logger.info(`Connection to mongo database closed`));
 
 // eslint-disable-next-line @typescript-eslint/no-misused-promises
 process.on('SIGINT', async () => {

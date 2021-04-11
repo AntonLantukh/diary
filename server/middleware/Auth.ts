@@ -34,9 +34,11 @@ class AuthMiddleware {
             throw new createError.Unauthorized('Invalid username or password');
         }
 
-        await checkPassword(result.password, user.password).catch(() => {
+        const isMatched = await checkPassword(result.password, user.password);
+
+        if (!isMatched) {
             throw new createError.Unauthorized('Invalid username or password');
-        });
+        }
 
         req.userId = user.id;
 
@@ -44,28 +46,28 @@ class AuthMiddleware {
     }
 
     async validateAccessToken(req: Request, res: Response, next: NextFunction): Promise<void> {
-        const authHeader = req.headers.authorization;
+        const accessToken = req.cookies['Access-Token'] as string;
 
-        if (!authHeader) {
+        if (!accessToken) {
             throw new createError.Unauthorized();
         }
 
-        const authHeaderContent = (authHeader || '').split(' ');
-        const accessToken = authHeaderContent[1];
-
         await verifyAccessToken(accessToken);
-
         next();
     }
 
     async validateRefreshToken(req: Request, res: Response, next: NextFunction): Promise<void> {
-        const {refreshToken} = req.body as {refreshToken: string};
+        const refreshToken = req.cookies['Refresh-Token'] as string;
 
         if (!refreshToken) {
-            throw new createError.Unauthorized();
+            res.redirect(302, '/main');
+            return;
         }
 
-        req.userId = await verifyRefreshToken(refreshToken);
+        req.userId = await verifyRefreshToken(refreshToken).catch(() => {
+            res.redirect(302, '/main');
+            return '';
+        });
 
         next();
     }

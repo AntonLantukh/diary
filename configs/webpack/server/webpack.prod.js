@@ -2,13 +2,13 @@ const path = require('path');
 
 const nodeExternals = require('webpack-node-externals');
 
-const {babel, css} = require('./modules');
-const plugins = require('./plugins');
+const {babel, css} = require('../modules');
+const plugins = require('../plugins');
 
-const {PATHS, REG_EXP} = require('../constants');
+const {PATHS} = require('../../constants');
 
 module.exports = {
-    mode: 'development',
+    mode: 'production',
     entry: {
         app: path.join(PATHS.server, 'index.ts'),
     },
@@ -27,20 +27,16 @@ module.exports = {
         symlinks: false,
         extensions: ['.ts', '.tsx', '.js', '.json'],
         alias: {
-            shared: path.resolve(__dirname, '../../shared'),
-            client: path.resolve(__dirname, '../../client'),
-            server: path.resolve(__dirname, '../../server'),
-            '˜': path.resolve(__dirname, '../../client'),
-            '@': path.resolve(__dirname, '../../server'),
+            shared: path.resolve(__dirname, '../../../shared'),
+            client: path.resolve(__dirname, '../../../client'),
+            server: path.resolve(__dirname, '../../../server'),
+            '˜': path.resolve(__dirname, '../../../client'),
+            '@': path.resolve(__dirname, '../../../server'),
         },
-    },
-    watch: true,
-    watchOptions: {
-        ignored: REG_EXP.node_modules,
     },
     devtool: 'source-map',
     module: {
-        rules: [css.server.dev, babel.dev],
+        rules: [css.server.prod, babel.dev],
     },
-    plugins: plugins.server.dev,
+    plugins: plugins.server.prod,
 };

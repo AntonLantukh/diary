@@ -24,7 +24,7 @@ const Registration: FunctionComponent = () => {
             <FormControl fullWidth>
                 <TextField
                     name="email"
-                    // @ts-ignore
+                    // @ts-expect-error
                     inputRef={register({required: t('main:register.error.email')})}
                     label={t('main:register.field.email')}
                     variant="outlined"
@@ -33,7 +33,7 @@ const Registration: FunctionComponent = () => {
             <FormControl fullWidth>
                 <TextField
                     name="password"
-                    // @ts-ignore
+                    // @ts-expect-error
                     inputRef={register({required: t('main:register.error.password')})}
                     label={t('main:register.field.password')}
                     variant="outlined"
@@ -42,7 +42,7 @@ const Registration: FunctionComponent = () => {
             <FormControl fullWidth>
                 <TextField
                     name="passwordConfirm"
-                    // @ts-ignore
+                    // @ts-expect-error
                     inputRef={register({required: t('main:register.error.passwordRepeat')})}
                     label={t('main:register.field.passwordRepeat')}
                     variant="outlined"

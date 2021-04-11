@@ -1,6 +1,6 @@
 import {Schema} from 'mongoose';
 
-import database from '../database';
+import database from '../database/mongo';
 
 const schema = new Schema({
     token: {

@@ -22,8 +22,10 @@ export class AuthRouter extends CommonRouterConfig {
             .post([handleAsync(authMiddleware.validateLoginData)], handleAsync(authController.login));
         this.router
             .route('/refresh-token')
-            .post([handleAsync(authMiddleware.validateRefreshToken)], handleAsync(authController.refreshToken));
-        this.router.route('/logout').post(handleAsync(authController.register));
+            .get([handleAsync(authMiddleware.validateRefreshToken)], handleAsync(authController.refreshToken));
+        this.router
+            .route('/logout')
+            .post([handleAsync(authMiddleware.validateRefreshToken)], handleAsync(authController.logout));
 
         return this.router;
     }

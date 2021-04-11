@@ -4,7 +4,7 @@ import userService from '../service/User';
 
 class UsersMiddleware {
     async validateUserExists(req: Request, res: Response, next: NextFunction): Promise<void> {
-        const user = await userService.readById(Number(req.params.userId));
+        const user = await userService.readById(req.params.userId);
 
         if (user) {
             next();

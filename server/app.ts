@@ -1,23 +1,18 @@
 import path from 'path';
 import express from 'express';
 import compression from 'compression';
-import dotenv from 'dotenv';
 import bodyParser from 'body-parser';
 import cookieParser from 'cookie-parser';
 
 import localeRouter from './routes/Locale';
 import userRouter from './routes/User';
 import authRouter from './routes/Auth';
+import clientRouter from './routes/Client';
 
-import ssrMiddleware from './middleware/ssr';
 import errorMiddleware from './middleware/error';
 import detectLocale from './middleware/locale';
-import authMiddleware from './middleware/Auth';
-import {handleAsync} from './middleware/async';
 
 import {routeLogger, errorLogger} from './logger';
-
-dotenv.config();
 
 const app = express();
 
@@ -34,9 +29,7 @@ app.use(errorLogger);
 app.use('/api/user', userRouter.configureRoutes());
 app.use('/api/auth', authRouter.configureRoutes());
 app.use('/api/locale', localeRouter.configureRoutes());
-
-app.get('/cabinet', [handleAsync(authMiddleware.validateAccessToken), ssrMiddleware]);
-app.get('/main', [ssrMiddleware]);
+app.use('/', clientRouter.configureRoutes());
 
 app.use(errorMiddleware);
 

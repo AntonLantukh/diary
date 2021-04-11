@@ -1,52 +1,28 @@
 import fetch from 'isomorphic-fetch';
 import {mergeDeepRight} from 'ramda';
 
-import {METHOD} from 'shared/constants/method';
+import {METHOD, CONTENT_TYPE_HEADER, BASE_REQUEST} from 'shared/constants/request';
+import {IncomingConfig, IncomingRequest, ContentType, Params, Body, RequestFetchConfig} from 'shared/typings/request';
 
-type Params = Record<string, string | number | (string | number)[]>;
+class FetchRequest {
+    private accessToken: string | undefined;
 
-type Body = FormData | string;
-
-type RequestIncomingConfig = {
-    method?: string;
-    mode?: 'cors' | 'no-cors' | 'navigate' | 'same-origin';
-    credentials?: 'include' | 'omit' | 'same-origin';
-    headers?: {
-        'Content-Type'?: 'multipart/form-data' | 'application/json';
-    };
-};
-
-type RequestFetchConfig = {
-    method: string;
-    mode: 'cors' | 'no-cors' | 'navigate' | 'same-origin';
-    credentials: 'include' | 'omit' | 'same-origin';
-    headers: {
-        'Content-Type': 'multipart/form-data' | 'application/json';
-    };
-};
-
-const BASE_REQUEST: RequestIncomingConfig = {
-    method: METHOD.GET,
-    mode: 'same-origin',
-    credentials: 'same-origin',
-    headers: {
-        'Content-Type': 'application/json',
-    },
-};
-
-class Request {
-    buildRequest<T>(url: string, params: Params, request?: RequestIncomingConfig): Promise<T> {
+    buildRequest(incomingRequest: IncomingRequest): Promise<any> {
+        const {url, params, config} = incomingRequest;
         const parsedParams = this.omitNil(params);
-        const mergedRequest = mergeDeepRight(BASE_REQUEST, request || {}) as RequestFetchConfig;
-        const requestURL = this.createURL(mergedRequest, url, parsedParams);
-        const body = this.prepareRequestBody(mergedRequest, parsedParams);
-        const config = mergedRequest.method === METHOD.GET ? mergedRequest : {...mergedRequest, body};
+        const contentType = this.parseContentType(config);
+        const body = this.prepareRequestBody(contentType, parsedParams);
 
-        return fetch(requestURL, config).then(data => this.handleResponse(data));
+        const options = this.mergeRequest(config, contentType, body);
+        const request = new Request(this.createURL(options, url, parsedParams), options);
+
+        return fetch(request)
+            .then(res => this.handleResponse(res))
+            .catch(this.handleError);
     }
 
-    private prepareRequestBody(request: RequestFetchConfig, params: Params): Body {
-        if (request?.headers?.['Content-Type'] === 'multipart/form-data') {
+    private prepareRequestBody(contentType: ContentType, params: Params): Body {
+        if (contentType === 'multipart/form-data') {
             const formData = new FormData();
             for (const name in params) {
                 formData.append(name, String(params[name]));
@@ -54,20 +30,46 @@ class Request {
             return formData;
         }
 
-        return this.toQueryString(params || {});
+        return this.toUrlEncoded(params || {});
     }
 
-    private handleResponse<M>(response: Response): Promise<M> {
-        return response.json().then(res => {
-            if (response.status === 403) {
-                throw new Error();
-            }
-            if (response.ok) {
-                return res;
-            } else {
-                return Promise.reject(res);
-            }
-        });
+    private handleResponse(response: Response): Promise<any> {
+        if (!response.ok) {
+            return Promise.reject(response);
+        }
+
+        if (/json/.test(response.headers.get('content-type') || '')) {
+            return response.json();
+        }
+
+        return response.text();
+    }
+
+    private handleError(response: Response): any {
+        return response.body;
+    }
+
+    private mergeRequest(
+        request: IncomingConfig | undefined,
+        contentType: ContentType,
+        body: Body,
+    ): RequestFetchConfig {
+        const mergedRequest = mergeDeepRight(
+            {...BASE_REQUEST, headers: {...BASE_REQUEST.headers, 'Content-Type': contentType}},
+            request || {},
+        ) as RequestFetchConfig;
+
+        return mergedRequest.method === METHOD.GET ? mergedRequest : {...mergedRequest, body};
+    }
+
+    private parseContentType(request: IncomingConfig | undefined): ContentType {
+        const contentType = this.getContentType(request);
+
+        return contentType || CONTENT_TYPE_HEADER[request?.method || METHOD.GET];
+    }
+
+    private getContentType(request: IncomingConfig | undefined): ContentType | undefined {
+        return request?.headers?.['Content-Type'];
     }
 
     private createURL(request: RequestFetchConfig, url: string, params: Params): string {
@@ -78,21 +80,23 @@ class Request {
         return url;
     }
 
-    private toQueryString(params: Params): string {
+    private toUrlEncoded(params: Params): string | undefined {
         const data = Object.keys(params)
-            .map(key => {
-                const value = params[key];
-
-                return `${key}=${encodeURIComponent(Array.isArray(value) ? value.join(',') : value)}`;
-            })
+            .map(key => `${key}=${encodeURIComponent(String(params[key]))}`)
             .join('&');
 
-        return `?${data}`;
+        return data;
     }
 
-    private omitNil(data: Params): Params {
+    private toQueryString(params: Params): string {
+        const urlEncoded = this.toUrlEncoded(params);
+
+        return urlEncoded ? `?${urlEncoded}` : '';
+    }
+
+    private omitNil(data?: Params): Params {
         if (typeof data !== 'object') {
-            return data;
+            return {};
         }
 
         return Object.keys(data)
@@ -101,4 +105,4 @@ class Request {
     }
 }
 
-export default new Request();
+export default new FetchRequest();

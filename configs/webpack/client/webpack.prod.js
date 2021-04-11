@@ -2,12 +2,30 @@ const path = require('path');
 
 const CssMinimizerPlugin = require('css-minimizer-webpack-plugin');
 
-const {assets, css, babel} = require('./modules');
-const plugins = require('./plugins');
+const {assets, css, babel} = require('../modules');
+const plugins = require('../plugins');
 
-const {PATHS} = require('../constants');
+const {PATHS} = require('../../constants');
 
-module.exports = {
+const serviceWorker = {
+    mode: 'production',
+    entry: {
+        apiServiceWorker: path.resolve(__dirname, '../../../client/workers/api.sw.ts'),
+    },
+    output: {
+        filename: '[name].js',
+        chunkFilename: '[name].js',
+        globalObject: 'self',
+        path: path.join(PATHS.dist, 'client'),
+    },
+    target: 'webworker',
+    module: {
+        rules: [babel.dev],
+    },
+    plugins: plugins.client.sw.prod,
+};
+
+const web = {
     mode: 'production',
     entry: {
         main: path.join(PATHS.client, 'index.tsx'),
@@ -22,17 +40,17 @@ module.exports = {
         symlinks: false,
         extensions: ['.ts', '.tsx', '.js', '.json'],
         alias: {
-            shared: path.resolve(__dirname, '../../shared'),
-            client: path.resolve(__dirname, '../../client'),
-            server: path.resolve(__dirname, '../../server'),
-            '˜': path.resolve(__dirname, '../../client'),
-            '@': path.resolve(__dirname, '../../server'),
+            shared: path.resolve(__dirname, '../../../shared'),
+            client: path.resolve(__dirname, '../../../client'),
+            server: path.resolve(__dirname, '../../../server'),
+            '˜': path.resolve(__dirname, '../../../client'),
+            '@': path.resolve(__dirname, '../../../server'),
         },
     },
     module: {
         rules: [babel.prod, css.client.prod, assets.prod],
     },
-    plugins: plugins.client.prod,
+    plugins: plugins.client.web.prod,
     performance: {
         maxEntrypointSize: 1 * 1024 * 1024, // 1 mb
         maxAssetSize: 1 * 500 * 1024, // 500 kb
@@ -62,3 +80,5 @@ module.exports = {
         },
     },
 };
+
+module.exports = [serviceWorker, web];

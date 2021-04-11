@@ -6,6 +6,7 @@ import {loadableReady} from '@loadable/component';
 import {useSSR} from 'react-i18next';
 
 import {getStateFromWindow} from '˜/utils/state';
+import {registerServiceWorker} from '˜/utils/serviceWorker';
 import {setupI18Next} from './i18n';
 
 import Base from 'shared/components/Base';
@@ -14,6 +15,8 @@ const HotBase = hot(Base);
 
 const root = document.querySelector('#root');
 const state = getStateFromWindow();
+
+registerServiceWorker();
 
 const renderFunction: ReactDOM.Renderer = root?.hasChildNodes() ? hydrate : render;
 

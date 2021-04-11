@@ -13,20 +13,26 @@ const getDefinePlugin = env => new DefinePlugin({__IS_BROWSER__: env === ENVIRON
 
 const CLEAN_PLUGIN = new CleanWebpackPlugin({cleanStaleWebpackAssets: false});
 const LOADABLE_PLUGIN = new LoadablePlugin();
-const HTML_PLUGIN = new HtmlWebpackPlugin({
-    filename: 'index.html',
-    template: path.join(PATHS.client, 'html/index.html'),
-});
+// const HTML_PLUGIN = new HtmlWebpackPlugin({
+//     filename: 'index.html',
+//     template: path.join(PATHS.client, 'html/index.html'),
+// });
 
 module.exports = {
     client: {
-        dev: [CLEAN_PLUGIN, getCssPlugin('[name].css'), LOADABLE_PLUGIN, getDefinePlugin(ENVIRONMENT.client)],
-        prod: [
-            CLEAN_PLUGIN,
-            getCssPlugin('[name].[contenthash].css'),
-            LOADABLE_PLUGIN,
-            getDefinePlugin(ENVIRONMENT.client),
-        ],
+        web: {
+            dev: [CLEAN_PLUGIN, getCssPlugin('[name].css'), LOADABLE_PLUGIN, getDefinePlugin(ENVIRONMENT.client)],
+            prod: [
+                CLEAN_PLUGIN,
+                getCssPlugin('[name].[contenthash].css'),
+                LOADABLE_PLUGIN,
+                getDefinePlugin(ENVIRONMENT.client),
+            ],
+        },
+        sw: {
+            dev: [CLEAN_PLUGIN],
+            prod: [CLEAN_PLUGIN],
+        },
     },
     server: {
         dev: [CLEAN_PLUGIN, getDefinePlugin(ENVIRONMENT.server)],

@@ -1,13 +1,13 @@
 ### Cabinet route
 GET http://localhost:3000/cabinet
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpYXQiOjE2MTc1NTk3ODYsImV4cCI6MTYxNzU1OTg0NiwiYXVkIjoiNjA2YTAwZTc3MTkwNzUyN2U0YTFkNjljIiwiaXNzIjoiZGlhcnkucnUifQ.oS9g5x7H_OhVzHRnERzCBZSoIIedReyMNk75MOrWLhw
+Cookie: Access-Token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpYXQiOjE2MTc2NTk0MzcsImV4cCI6MTYxNzY2MDAzNywiYXVkIjoiNjA2YTI2NmMwNDc2ODg1OTM1MDc2NTc2IiwiaXNzIjoiZGlhcnkucnUifQ.tBPaZNwo7Px0e3WiVp1-jGvGM-BOFfftjQcJB3c169c; Refresh-Token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpYXQiOjE2MTc2NTk0MzcsImV4cCI6MTYxNzY2MzAzNywiYXVkIjoiNjA2YTI2NmMwNDc2ODg1OTM1MDc2NTc2IiwiaXNzIjoiZGlhcnkucnUifQ.O8jVQnytR3QWty1z_bzaLlfAcaI2V0OwuVbyOyssJE8
 
 ### Register route
 POST http://localhost:3000/api/auth/register
 Content-Type: application/json
 
 {
-    "email": "zzz@d.ru",
+    "email": "zz@d.ru",
     "password": "test12345678",
     "passwordConfirm": "test12345678"
 }
@@ -17,7 +17,7 @@ POST http://localhost:3000/api/auth/login
 Content-Type: application/json
 
 {
-    "email": "zzz@d.ru",
+    "email": "zz@d.ru",
     "password": "test12345678"
 }
 
@@ -26,5 +26,13 @@ POST http://localhost:3000/api/auth/refresh-token
 Content-Type: application/json
 
 {
-    "refreshToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpYXQiOjE2MTc1NTk3ODYsImV4cCI6MTYxNzU2MzM4NiwiYXVkIjoiNjA2YTAwZTc3MTkwNzUyN2U0YTFkNjljIiwiaXNzIjoiZGlhcnkucnUifQ.TtXC9QuscucFEjmoSyp6fJ4wN2Cjb2oGEBMn-7QvX1Q"
+    "refreshToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpYXQiOjE2MTc1Njk2MzksImV4cCI6MTYxNzU2OTY2OSwiYXVkIjoiNjA2YTI2NmMwNDc2ODg1OTM1MDc2NTc2IiwiaXNzIjoiZGlhcnkucnUifQ.e7HWvHsHOxoLxI1v9R-5hOx2a4uHG-V4NEYNVWo3e2g"
+}
+
+### Logout
+POST http://localhost:3000/api/auth/logout
+Content-Type: application/json
+
+{
+    "refreshToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpYXQiOjE2MTc1NzAwNTMsImV4cCI6MTYxNzU3MDExMywiYXVkIjoiNjA2YTI2NmMwNDc2ODg1OTM1MDc2NTc2IiwiaXNzIjoiZGlhcnkucnUifQ.s0g8oe-p_t8rVZXm51N0c6mCKWrdlBXBT-Lx8GlhkWI"
 }

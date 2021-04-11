@@ -14,6 +14,7 @@ type MongoDuplicateError = {
     name: string;
     index: number;
     code: number;
+    status?: number;
     keyPattern: Record<string, number | string>;
     keyValue: Record<string, number | string>;
 };
@@ -64,7 +65,6 @@ export default (
     _next: NextFunction,
 ): void => {
     logger.error(err);
-
     try {
         if (err.statusCode === 400) {
             res.status(err.statusCode).send(err);
@@ -78,6 +78,8 @@ export default (
         if (err.code && err.code == 11000) {
             handleDuplicateKeyError((err as unknown) as MongoDuplicateError, res);
         }
+
+        res.status(err.status).send(err.message);
     } catch (err) {
         res.status(500).send('An unknown error occurred.');
     }
