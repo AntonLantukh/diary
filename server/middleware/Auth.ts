@@ -52,7 +52,9 @@ class AuthMiddleware {
             throw new createError.Unauthorized();
         }
 
-        await verifyAccessToken(accessToken);
+        const userId = await verifyAccessToken(accessToken);
+        req.user = await userService.readById(userId);
+
         next();
     }
 

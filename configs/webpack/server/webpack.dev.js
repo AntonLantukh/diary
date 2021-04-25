@@ -2,7 +2,7 @@ const path = require('path');
 
 const nodeExternals = require('webpack-node-externals');
 
-const {babel, css} = require('../modules');
+const {babel, css, assets} = require('../modules');
 const plugins = require('../plugins');
 
 const {PATHS, REG_EXP} = require('../../constants');
@@ -16,6 +16,7 @@ module.exports = {
         filename: 'index.js',
         chunkFilename: 'index.js',
         path: path.join(PATHS.dist, 'server'),
+        publicPath: '/',
     },
     target: 'node',
     node: {
@@ -40,7 +41,7 @@ module.exports = {
     },
     devtool: 'source-map',
     module: {
-        rules: [css.server.dev, babel.dev],
+        rules: [css.server.dev, babel.dev, ...assets.server.dev],
     },
     plugins: plugins.server.dev,
 };

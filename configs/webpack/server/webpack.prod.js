@@ -2,7 +2,7 @@ const path = require('path');
 
 const nodeExternals = require('webpack-node-externals');
 
-const {babel, css} = require('../modules');
+const {babel, css, assets} = require('../modules');
 const plugins = require('../plugins');
 
 const {PATHS} = require('../../constants');
@@ -36,7 +36,7 @@ module.exports = {
     },
     devtool: 'source-map',
     module: {
-        rules: [css.server.prod, babel.dev],
+        rules: [css.server.prod, babel.dev, ...assets.server.prod],
     },
     plugins: plugins.server.prod,
 };

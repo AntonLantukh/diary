@@ -1,7 +1,13 @@
 import React, {FunctionComponent} from 'react';
 
-import FormWrapper from '../FormWrapper';
+import Promo from '../Promo';
 
-const Content: FunctionComponent = () => <FormWrapper />;
+import css from './style.css';
+
+const Content: FunctionComponent = () => (
+    <div className={css.content}>
+        <Promo />
+    </div>
+);
 
 export default Content;

@@ -8,10 +8,18 @@ export type UserCreateDB = {
     isArchived: boolean;
 };
 
+export type UserUpdateDB = {
+    _id: string;
+    password?: string;
+    email?: string;
+    name?: string;
+    surname?: string;
+    isArchived?: boolean;
+};
+
 export type UserGetDB = {
     _id: UserId;
     password: string;
-    salt: string;
     email: string;
     name?: string;
     surname?: string;
@@ -37,7 +45,14 @@ export type UserUpdateDto = {
     surname: string;
 };
 
-export type UserGetDto = {
+export type UserGetSecureDto = {
+    id: UserId;
+    email: string;
+    name?: string;
+    surname?: string;
+};
+
+export type UserGetInsecureDto = {
     id: UserId;
     email: string;
     password: string;

@@ -1,0 +1,10 @@
+.signIn {
+    display: grid;
+    grid-template-rows: auto auto;
+    row-gap: 30px;
+}
+
+.error {
+    margin-top: 4px;
+    color: red;
+}

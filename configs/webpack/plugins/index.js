@@ -1,31 +1,46 @@
 const path = require('path');
+const process = require('process');
 
-const HtmlWebpackPlugin = require('html-webpack-plugin');
 const {CleanWebpackPlugin} = require('clean-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const LoadablePlugin = require('@loadable/webpack-plugin');
 const {DefinePlugin} = require('webpack');
+const CopyWebpackPlugin = require('copy-webpack-plugin');
 
-const {PATHS, ENVIRONMENT} = require('../../constants');
+const {ENVIRONMENT} = require('../../constants');
+const {PATHS} = require('../../constants');
 
 const getCssPlugin = filename => new MiniCssExtractPlugin({filename, chunkFilename: filename});
-const getDefinePlugin = env => new DefinePlugin({__IS_BROWSER__: env === ENVIRONMENT.server ? false : true});
+const getDefinePlugin = env =>
+    new DefinePlugin({
+        __IS_BROWSER__: env === ENVIRONMENT.server ? false : true,
+        __IS_PRODUCTION__: process.env.NODE_ENV === 'production' ? true : false,
+    });
 
 const CLEAN_PLUGIN = new CleanWebpackPlugin({cleanStaleWebpackAssets: false});
+const COPY_PLUGIN = new CopyWebpackPlugin({
+    patterns: [
+        {from: './manifest.json', to: path.join(PATHS.dist, 'client')},
+        {from: './assets/icons', to: path.join(PATHS.dist, '/client/icons')},
+    ],
+});
 const LOADABLE_PLUGIN = new LoadablePlugin();
-// const HTML_PLUGIN = new HtmlWebpackPlugin({
-//     filename: 'index.html',
-//     template: path.join(PATHS.client, 'html/index.html'),
-// });
 
 module.exports = {
     client: {
         web: {
-            dev: [CLEAN_PLUGIN, getCssPlugin('[name].css'), LOADABLE_PLUGIN, getDefinePlugin(ENVIRONMENT.client)],
+            dev: [
+                CLEAN_PLUGIN,
+                getCssPlugin('[name].css'),
+                LOADABLE_PLUGIN,
+                COPY_PLUGIN,
+                getDefinePlugin(ENVIRONMENT.client),
+            ],
             prod: [
                 CLEAN_PLUGIN,
                 getCssPlugin('[name].[contenthash].css'),
                 LOADABLE_PLUGIN,
+                COPY_PLUGIN,
                 getDefinePlugin(ENVIRONMENT.client),
             ],
         },
@@ -35,7 +50,7 @@ module.exports = {
         },
     },
     server: {
-        dev: [CLEAN_PLUGIN, getDefinePlugin(ENVIRONMENT.server)],
-        prod: [CLEAN_PLUGIN, getDefinePlugin(ENVIRONMENT.server)],
+        dev: [CLEAN_PLUGIN, COPY_PLUGIN, getDefinePlugin(ENVIRONMENT.server)],
+        prod: [CLEAN_PLUGIN, COPY_PLUGIN, getDefinePlugin(ENVIRONMENT.server)],
     },
 };

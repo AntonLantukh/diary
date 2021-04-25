@@ -48,7 +48,7 @@ const web = {
         },
     },
     module: {
-        rules: [babel.prod, css.client.prod, assets.prod],
+        rules: [babel.prod, css.client.prod, ...assets.client.prod],
     },
     plugins: plugins.client.web.prod,
     performance: {

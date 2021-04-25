@@ -32,7 +32,7 @@ const fetchData = (request: Request): Promise<Response> => {
         }
 
         if (shouldCache(request)) {
-            await cacheResponse(request, response);
+            // await cacheResponse(request, response);
         }
         return response;
     });

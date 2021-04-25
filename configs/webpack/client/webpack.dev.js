@@ -21,6 +21,7 @@ const serviceWorker = {
             shared: path.resolve(__dirname, '../../../shared'),
         },
     },
+    devtool: 'source-map',
     target: 'webworker',
     module: {
         rules: [babel.dev],
@@ -54,7 +55,7 @@ const web = {
     },
     devtool: 'source-map',
     module: {
-        rules: [babel.dev, css.client.dev, assets.dev],
+        rules: [babel.dev, css.client.dev, ...assets.client.dev],
     },
     plugins: plugins.client.web.dev,
     devServer: {

@@ -9,7 +9,7 @@ import {getStateFromWindow} from '˜/utils/state';
 import {registerServiceWorker} from '˜/utils/serviceWorker';
 import {setupI18Next} from './i18n';
 
-import Base from 'shared/components/Base';
+import Base from 'client/components/Base';
 
 const HotBase = hot(Base);
 

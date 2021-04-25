@@ -1,17 +1,12 @@
-import {UserGetDto, UserCreateDto, UserGetDB, UserCreateDB, UserUpdateDto, UserId} from '../typings/User';
+import {UserGetDB, UserCreateDB, UserId, UserUpdateDB} from '../typings/User';
 
-import {generatePassword} from '../utils/password';
 import {logger} from '../logger';
 
 import UserModel from '../model/User';
-import userConverter from '../converter/User';
 
 class UsersDao {
-    async saveUser(userDto: UserCreateDto): Promise<number> {
-        const password = await generatePassword(userDto.password);
-        const user = await UserModel.create<UserCreateDB>(
-            userConverter.userCreateDtoToCreateDb(userDto, {password}),
-        ).then(user => {
+    async saveUser(userDb: UserCreateDB): Promise<number> {
+        const user = await UserModel.create(userDb).then(user => {
             logger.info(`Created user ${JSON.stringify(user)}`);
 
             return user;
@@ -20,7 +15,7 @@ class UsersDao {
         return user.id as number;
     }
 
-    async getUsers(limit: number, page = 1): Promise<UserGetDto[]> {
+    async getUsers(limit: number, page = 1): Promise<UserGetDB[]> {
         const users = ((await UserModel.find()
             .limit(limit)
             .skip(limit * page)
@@ -30,25 +25,24 @@ class UsersDao {
 
                 return users;
             })) as unknown) as UserGetDB[];
-        const convertedUsers = users.map(userConverter.userGetDbToGetDto);
 
-        return convertedUsers;
+        return users;
     }
 
-    async getUserById(userId: UserId): Promise<UserGetDto> {
-        const user = ((await UserModel.findById(userId).then(user => {
+    async getUserById(userId: UserId): Promise<UserGetDB | null> {
+        const user = (await UserModel.findById(userId).then(user => {
             if (user) {
                 logger.info(`Found user ${JSON.stringify(user)} by userId ${userId}`);
             } else {
                 logger.warn(`User by userId ${userId} not found`);
             }
-        })) as unknown) as UserGetDto;
+        })) as UserGetDB | null;
 
         return user;
     }
 
-    async getUserByEmail(email: string): Promise<UserGetDto> {
-        const user = ((await UserModel.findOne({email}).then(user => {
+    async getUserByEmail(email: string): Promise<UserGetDB | null> {
+        const user = (await UserModel.findOne({email}).then(user => {
             if (user) {
                 logger.info(`Found user ${JSON.stringify(user)} by email ${email}`);
             } else {
@@ -56,17 +50,17 @@ class UsersDao {
             }
 
             return user;
-        })) as unknown) as UserGetDto;
+        })) as UserGetDB | null;
 
         return user;
     }
 
-    async updateUser(userDto: UserUpdateDto): Promise<UserGetDto> {
-        const updatedUser = ((await UserModel.findOneAndUpdate({id: userDto.id}, userDto).then(user => {
+    async updateUser(userDb: UserUpdateDB): Promise<UserGetDB> {
+        const updatedUser = (await UserModel.findOneAndUpdate({id: userDb['_id']}, userDb).then(user => {
             logger.info(`Updated user ${JSON.stringify(user)}`);
 
             return user;
-        })) as unknown) as UserGetDto;
+        })) as UserGetDB;
 
         return updatedUser;
     }

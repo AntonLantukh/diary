@@ -1,0 +1,4 @@
+.button {
+    background-color: var(--myPink) !important;
+    color: var(--white) !important;
+}

@@ -14,13 +14,14 @@ import {getMatchedPage} from 'shared/utils/router';
 
 import {I18nKeys} from 'shared/typings/i18n';
 
-import Base from 'shared/components/Base';
-import HtmlPage from '../components/HtmlPage';
+import Base from 'client/components/Base';
+import HtmlPage from '../html';
 
 import {setupI18Next} from '../i18n';
 
 import CommonStore from 'shared/store/Common';
 import I18nStore from 'shared/store/I18n';
+import UserStore from 'shared/store/User';
 
 type Context = {
     url?: string;
@@ -45,6 +46,7 @@ const getState = async (req: Request, locale: string, i18nKeys: I18nKeys) => {
     const initialPageData = await loadInitialPageData(req.query, getInitialData);
     const common = new CommonStore({query: req.query, pathName: req.path, pageName: name});
     const i18n = new I18nStore({locale, i18nKeys});
+    // const user = new UserStore();
 
     return new State({...initialPageData, i18n, common});
 };
@@ -60,35 +62,35 @@ class ClientController {
         const scripts = chunkExtractor.getScriptElements();
         const styles = chunkExtractor.getStyleElements();
 
-        const locale = req.language;
-        const i18nServer = await setupI18Next(locale);
-        const i18nKeys = ({[locale]: i18nServer.getDataByLanguage(locale)} as unknown) as I18nKeys;
-        const state = await getState(req, locale, i18nKeys);
+        const {language, cspNonce} = req;
+
+        const i18nServer = await setupI18Next(language);
+        const i18nKeys = ({[language]: i18nServer.getDataByLanguage(language)} as unknown) as I18nKeys;
+        const state = await getState(req, language, i18nKeys);
 
         const context: Context = {};
 
         const JSX = chunkExtractor.collectChunks(
-            <I18nextProvider i18n={i18nServer}>
-                <Base {...{state}} />
-            </I18nextProvider>,
+            <StaticRouter location={req.url} context={context}>
+                <I18nextProvider i18n={i18nServer}>
+                    <Base {...{state}} />
+                </I18nextProvider>
+            </StaticRouter>,
         );
 
         const Html = (
-            <HtmlPage scripts={scripts} styles={styles} initialState={serialize(state)}>
-                <StaticRouter location={req.url} context={context}>
-                    {JSX}
-                </StaticRouter>
+            <HtmlPage scripts={scripts} styles={styles} initialState={serialize(state)} nonce={cspNonce}>
+                {JSX}
             </HtmlPage>
         );
 
         const reactHtml = renderToString(Html);
 
         if (context.url) {
-            res.writeHead(301, {Location: context.url});
-            res.end();
+            res.redirect(301, context.url);
         } else {
-            res.write(reactHtml);
-            res.end();
+            res.append('Content-Type', 'text/html; charset=utf-8');
+            res.send(reactHtml);
         }
     }
 }

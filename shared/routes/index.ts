@@ -4,6 +4,7 @@ import {FunctionComponent} from 'react';
 import Main from '˜/pages/Main';
 import Cabinet from '˜/pages/Cabinet';
 import NotFound from '˜/pages/NotFound';
+import Login from '˜/pages/Login';
 
 import MainState from 'shared/state/Main';
 import CabinetState from 'shared/state/Cabinet';
@@ -44,6 +45,13 @@ export const routes: RouteConfig[] = [
         Component: Main,
         getInitialData: getInititalMainState,
         State: MainState,
+        privateRoute: false,
+    },
+    {
+        name: 'Login',
+        path: '/login',
+        Component: Login,
+        State: BaseState,
         privateRoute: false,
     },
     {

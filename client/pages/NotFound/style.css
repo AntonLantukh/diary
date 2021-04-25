@@ -1,5 +1,6 @@
 .container {
-    width: 800px;
-    height: 800px;
-    border: 1px solid salmon;
+    min-height: 80vh;
+    background-image: url('./notFound.jpg');
+    background-repeat: no-repeat;
+    background-size: cover;
 }

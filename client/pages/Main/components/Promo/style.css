@@ -1,0 +1,16 @@
+.promo {
+    display: grid;
+    min-width: 600px;
+    color: var(--white);
+    grid-row-gap: 12px;
+    text-align: center;
+}
+
+.promo__header {
+    font-weight: 800 !important;
+    text-shadow: 4px 4px 2px var(--myPink);
+}
+
+.promo__button {
+    justify-self: center;
+}

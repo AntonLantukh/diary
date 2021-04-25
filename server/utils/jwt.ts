@@ -14,8 +14,12 @@ type Token = {
     iss: string;
 };
 
-export const generateAccessToken = (userId: UserId): Promise<string> => {
+export const generateAccessToken = (userId: UserId | undefined): Promise<string> => {
     return new Promise((resolve, reject) => {
+        if (!userId) {
+            reject(new createError.InternalServerError());
+        }
+
         const options = {
             expiresIn: process.env.ACCESS_TOKEN_DURATION,
             issuer: 'diary.ru',
@@ -47,8 +51,12 @@ export const verifyAccessToken = (accessToken: string): Promise<UserId> => {
     });
 };
 
-export const generateRefreshToken = (userId: UserId): Promise<string> => {
+export const generateRefreshToken = (userId: UserId | undefined): Promise<string> => {
     return new Promise((resolve, reject) => {
+        if (!userId) {
+            reject(new createError.InternalServerError());
+        }
+
         const options = {
             expiresIn: process.env.REFRESH_TOKEN_DURATION,
             issuer: 'diary.ru',
@@ -97,9 +105,13 @@ export const verifyRefreshToken = (refreshToken: string): Promise<UserId> => {
     });
 };
 
-export const deleteRefreshToken = (userId: UserId): Promise<void> => {
+export const deleteRefreshToken = (userId: UserId | undefined): Promise<void> => {
     return new Promise((resolve, reject) => {
-        redisClient.DEL(userId, err => {
+        if (!userId) {
+            reject(new createError.InternalServerError());
+        }
+
+        redisClient.DEL(userId as UserId, err => {
             if (err) {
                 reject(createError(500, err));
             }

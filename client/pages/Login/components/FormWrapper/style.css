@@ -1,0 +1,12 @@
+.formWrapper {
+    display: grid;
+    min-width: 800px;
+    padding: 20px 40px;
+    margin: 0 auto;
+    row-gap: 40px;
+}
+
+.formWrapper__form {
+    display: grid;
+    row-gap: 20px;
+}

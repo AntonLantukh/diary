@@ -1,14 +1,34 @@
-import {UserCreateDB, UserGetDB, UserGetDto, UserCreateDto} from '../typings/User';
+import {
+    UserCreateDB,
+    UserGetDB,
+    UserGetSecureDto,
+    UserGetInsecureDto,
+    UserCreateDto,
+    UserUpdateDto,
+    UserUpdateDB,
+} from '../typings/User';
 
 type ParamsToDb = {
     password: string;
 };
 
 class UserConverter {
-    userGetDbToGetDto(userDb: UserGetDB): UserGetDto {
-        const {_id, email, name, password, surname} = userDb;
+    userGetDbToGetSecureDto(userDb: UserGetDB): UserGetSecureDto {
+        const {_id, email, name, surname} = userDb;
+
+        return {id: _id, email, name, surname};
+    }
+
+    userGetDbToGetInsecureDto(userDb: UserGetDB): UserGetInsecureDto {
+        const {_id, email, password, name, surname} = userDb;
 
         return {id: _id, email, password, name, surname};
+    }
+
+    userUpdateDtoToUpdateDb(userDto: UserUpdateDto): UserUpdateDB {
+        const {id, email, password, name, surname} = userDto;
+
+        return {_id: id, email, password, name, surname};
     }
 
     userCreateDtoToCreateDb(userDto: UserCreateDto, {password}: ParamsToDb): UserCreateDB {
