@@ -16,13 +16,13 @@ class UserConverter {
     userGetDbToGetSecureDto(userDb: UserGetDB): UserGetSecureDto {
         const {_id, email, name, surname} = userDb;
 
-        return {id: _id, email, name, surname};
+        return {id: _id.toString(), email, name, surname};
     }
 
     userGetDbToGetInsecureDto(userDb: UserGetDB): UserGetInsecureDto {
         const {_id, email, password, name, surname} = userDb;
 
-        return {id: _id, email, password, name, surname};
+        return {id: _id.toString(), email, password, name, surname};
     }
 
     userUpdateDtoToUpdateDb(userDto: UserUpdateDto): UserUpdateDB {

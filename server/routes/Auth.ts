@@ -15,11 +15,11 @@ export class AuthRouter extends CommonRouterConfig {
 
     configureRoutes(): Router {
         this.router
-            .route('/register')
-            .post([handleAsync(authMiddleware.validateRegisterData)], handleAsync(authController.register));
+            .route('/sign-up')
+            .post([handleAsync(authMiddleware.validateRegisterData)], handleAsync(authController.signUp));
         this.router
-            .route('/login')
-            .post([handleAsync(authMiddleware.validateLoginData)], handleAsync(authController.login));
+            .route('/sign-in')
+            .post([handleAsync(authMiddleware.validateLoginData)], handleAsync(authController.signIn));
         this.router
             .route('/refresh-token')
             .get([handleAsync(authMiddleware.validateRefreshToken)], handleAsync(authController.refreshToken));

@@ -13,24 +13,14 @@ import clientRouter from './routes/Client';
 import errorMiddleware from './middleware/error';
 import detectLocale from './middleware/locale';
 import attachCspNonce from './middleware/nonce';
+import helmetConfig from './middleware/helmet';
 
 import {routeLogger, errorLogger} from './logger';
 
 const app = express();
 
 app.use(attachCspNonce);
-app.use(
-    helmet({
-        contentSecurityPolicy: {
-            directives: {
-                ...helmet.contentSecurityPolicy.getDefaultDirectives(),
-                // @ts-expect-error
-                'script-src': ["'self'", (req: Request) => `'nonce-${req.cspNonce}'`],
-                'connect-src': [__IS_PRODUCTION__ ? "'self'" : '*'],
-            },
-        },
-    }),
-);
+app.use(helmet(helmetConfig()));
 app.use(compression());
 app.use(express.static(path.resolve(__dirname, '../dist/client')));
 app.use(cookieParser());

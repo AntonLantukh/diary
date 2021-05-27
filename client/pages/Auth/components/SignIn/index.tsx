@@ -7,7 +7,7 @@ import TextField from '@material-ui/core/TextField';
 import FormControl from '@material-ui/core/FormControl';
 import Button from '˜/components/Button';
 
-import {loginUser} from 'shared/resolvers/registration';
+import {signInUser} from 'shared/resolvers/auth';
 
 import {AuthorizationForm} from '../../typings';
 
@@ -18,7 +18,7 @@ const SignIn: FunctionComponent = () => {
     const {t} = useTranslation();
 
     const onSubmit = useCallback(async (form: AuthorizationForm) => {
-        await loginUser(form);
+        await signInUser(form);
     }, []);
 
     return (

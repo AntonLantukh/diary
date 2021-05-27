@@ -4,7 +4,7 @@ declare const self: ServiceWorkerGlobalScope;
 
 const CACHE_VERSION = 'v1';
 const REFRESH_TOKEN_URL = '/api/auth/refresh-token';
-const MAIN_URL = '/main';
+const AUTH_URL = '/auth';
 
 self.addEventListener('install', event => {
     event.waitUntil(self.skipWaiting());
@@ -23,22 +23,31 @@ const cacheResponse = async (request: Request, response: Response) => {
     });
 };
 
-const fetchData = (request: Request): Promise<Response> => {
+const fetchData = (request: Request, client: WindowClient | undefined): Promise<Response> => {
     const originalRequest = request.clone();
 
     return fetch(request).then(async response => {
         if (!response.ok) {
-            return handleTokenError(originalRequest, response);
+            return handleTokenError(originalRequest, response, client);
         }
 
         if (shouldCache(request)) {
             // await cacheResponse(request, response);
         }
+
+        if (response.redirected && client) {
+            await client.navigate(response.url);
+        }
+
         return response;
     });
 };
 
-async function handleTokenError(originalRequest: Request, response: Response): Promise<Response> {
+async function handleTokenError(
+    originalRequest: Request,
+    response: Response,
+    client: WindowClient | undefined,
+): Promise<Response> {
     // If access token expired, than try to get a new one via refresh token
     if (response.status === 401) {
         const tokenResponse = await fetch(
@@ -46,32 +55,34 @@ async function handleTokenError(originalRequest: Request, response: Response): P
         );
 
         // If refresh token genretaion failed => go to main
-        if (tokenResponse.redirected) {
-            return Promise.resolve(Response.redirect(MAIN_URL, 302));
+        if (tokenResponse.redirected && client) {
+            await client.navigate(AUTH_URL);
         }
 
         // Repeat original request with new access token
         return fetch(originalRequest);
     }
 
-    if (response.status === 403) {
-        return Promise.resolve(Response.redirect(MAIN_URL, 302));
+    if (response.status === 403 && client) {
+        await client.navigate(AUTH_URL);
     }
 
     return Promise.resolve(response);
 }
 
 self.addEventListener('fetch', event => {
-    const {request} = event;
+    const {request, clientId} = event;
 
     event.respondWith(
         // Checking url in caches
-        caches.match(request).then(response => {
+        caches.match(request).then(async response => {
             if (response !== undefined) {
                 return response;
             }
 
-            return fetchData(request);
+            const client = (await self.clients.get(clientId)) as WindowClient;
+
+            return fetchData(request, client);
         }),
     );
 });

@@ -1,8 +1,18 @@
 import fetch from 'isomorphic-fetch';
 import {mergeDeepRight} from 'ramda';
 
-import {METHOD, CONTENT_TYPE_HEADER, BASE_REQUEST} from 'shared/constants/request';
+import {METHOD, CONTENT_TYPE_HEADER} from 'shared/constants/request';
 import {IncomingConfig, IncomingRequest, ContentType, Params, Body, RequestFetchConfig} from 'shared/typings/request';
+
+const BASE_REQUEST = {
+    method: METHOD.GET,
+    redirect: 'follow',
+    mode: 'same-origin',
+    credentials: 'same-origin',
+    headers: {
+        'Content-Type': CONTENT_TYPE_HEADER.GET,
+    },
+};
 
 class FetchRequest {
     private accessToken: string | undefined;

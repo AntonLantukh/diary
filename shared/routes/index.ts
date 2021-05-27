@@ -4,7 +4,7 @@ import {FunctionComponent} from 'react';
 import Main from '˜/pages/Main';
 import Cabinet from '˜/pages/Cabinet';
 import NotFound from '˜/pages/NotFound';
-import Login from '˜/pages/Login';
+import Login from 'client/pages/Auth';
 
 import MainState from 'shared/state/Main';
 import CabinetState from 'shared/state/Cabinet';
@@ -48,8 +48,8 @@ export const routes: RouteConfig[] = [
         privateRoute: false,
     },
     {
-        name: 'Login',
-        path: '/login',
+        name: 'Auth',
+        path: '/auth',
         Component: Login,
         State: BaseState,
         privateRoute: false,

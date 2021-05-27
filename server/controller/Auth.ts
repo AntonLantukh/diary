@@ -4,13 +4,13 @@ import usersService from '../service/User';
 import {generateAccessToken, generateRefreshToken, deleteRefreshToken} from '../utils/jwt';
 
 class AuthController {
-    async register(req: Request, res: Response): Promise<void> {
+    async signUp(req: Request, res: Response): Promise<void> {
         const userId = await usersService.create(req.body);
 
         res.status(200).send({id: userId});
     }
 
-    async login(req: Request, res: Response): Promise<void> {
+    async signIn(req: Request, res: Response): Promise<void> {
         const accessToken = await generateAccessToken(req.userId);
         const refreshToken = await generateRefreshToken(req.userId);
 
@@ -25,7 +25,7 @@ class AuthController {
             secure: true,
         });
 
-        res.status(200).send();
+        res.redirect('/main');
     }
 
     async refreshToken(req: Request, res: Response): Promise<void> {

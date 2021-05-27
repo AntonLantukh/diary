@@ -1,4 +1,5 @@
 const path = require('path');
+const fs = require('fs');
 
 const {assets, css, babel} = require('../modules');
 const plugins = require('../plugins');
@@ -73,6 +74,10 @@ const web = {
             aggregateTimeout: 3000,
             poll: 8000,
             ignored: REG_EXP.node_modules,
+        },
+        https: {
+            key: fs.readFileSync('./certificates/localhost-key.pem'),
+            cert: fs.readFileSync('./certificates/localhost.pem'),
         },
     },
     performance: {
