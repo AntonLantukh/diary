@@ -13,4 +13,6 @@ export const API_ROUTE = {
     signIn: '/api/auth/sign-in',
     signOut: '/api/auth/sign-out',
     refreshToken: '/api/auth/refresh-token',
+    user: 'api/user',
+    locale: 'api/locale',
 } as const;

@@ -20,13 +20,12 @@ class AuthController {
         const accessToken = await generateAccessToken(req.userId);
         const refreshToken = await generateRefreshToken(req.userId);
 
-        res.header('X-Access-Token', accessToken);
         res.cookie('X-Refresh-Token', refreshToken, {
             maxAge: Number(process.env.REFRESH_TOKEN_TTL),
             ...COOKIE_OPTIONS,
         });
 
-        res.redirect('/main');
+        res.status(200).send({accessToken}).redirect('/main');
     }
 
     async refreshToken(req: Request, res: Response): Promise<void> {

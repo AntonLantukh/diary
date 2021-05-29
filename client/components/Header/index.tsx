@@ -3,7 +3,7 @@ import {Link as RouteLink} from 'react-router-dom';
 import {observer} from 'mobx-react-lite';
 import {useTranslation} from 'react-i18next';
 import Cookie from 'js-cookie';
-import {getLocale} from 'shared/resolvers/locale';
+import localeService from 'client/service/locale';
 
 import FormControl from '@material-ui/core/FormControl';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
@@ -16,6 +16,8 @@ import Select from '@material-ui/core/Select';
 
 import StateContext from 'shared/context/StateContext';
 import {BaseMobxState} from 'shared/typings/state';
+
+import authService from 'client/service/auth';
 
 import {COMMON_NAMESPACES} from 'shared/constants/i18n';
 
@@ -35,7 +37,7 @@ const Header: FunctionComponent = observer(() => {
             const value = evt.target.value as string;
 
             if (!i18n.hasResourceBundle(value, keysetName)) {
-                const keys = await getLocale({locale: value, page: keysetName});
+                const keys = await localeService.getLocale({locale: value, page: keysetName});
                 i18n.addResourceBundle(value, keysetName, keys, true);
                 COMMON_NAMESPACES.forEach(set => i18n.addResourceBundle(value, set, keys, true));
             }
@@ -45,6 +47,10 @@ const Header: FunctionComponent = observer(() => {
         },
         [changeLocale, i18n, keysetName],
     );
+
+    const onSignOut = useCallback(async () => {
+        await authService.signOut();
+    }, []);
 
     return (
         <header className={css.root}>
@@ -64,11 +70,11 @@ const Header: FunctionComponent = observer(() => {
                     label="Сменить тему"
                 />
                 <div className={css.user}>
-                    <Avatar>OP</Avatar>
+                    <Link to="/cabinet" component={RouteLink}>
+                        <Avatar>OP</Avatar>
+                    </Link>
                     <Typography variant="body2">
-                        <Link to="/cabinet" component={RouteLink}>
-                            {t('header:menu.cabinet')}
-                        </Link>
+                        <Link onClick={onSignOut}>Sign out</Link>
                     </Typography>
                 </div>
             </div>

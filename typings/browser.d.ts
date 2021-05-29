@@ -5,6 +5,7 @@ declare global {
         __INITIAL_STATE__: string | BaseState;
         location: {
             pathname: string;
+            href: string;
         };
     }
 }

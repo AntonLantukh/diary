@@ -20,9 +20,6 @@ const serviceWorker = {
     },
     resolve: {
         extensions: ['.ts', '.tsx', '.js', '.json'],
-        alias: {
-            shared: path.resolve(__dirname, '../../../shared'),
-        },
     },
     target: 'webworker',
     module: {

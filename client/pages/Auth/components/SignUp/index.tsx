@@ -6,7 +6,7 @@ import TextField from '@material-ui/core/TextField';
 import FormControl from '@material-ui/core/FormControl';
 import Button from '˜/components/Button';
 
-import {signUpUser} from 'shared/resolvers/auth';
+import authService from 'client/service/auth';
 
 import {RegistrationForm} from '../../typings';
 
@@ -16,7 +16,7 @@ const SignUp: FunctionComponent = () => {
     const {t} = useTranslation();
     const {register, handleSubmit} = useForm<RegistrationForm>({});
     const onSubmit = useCallback(async (form: RegistrationForm) => {
-        await signUpUser(form);
+        await authService.signUp(form);
     }, []);
 
     return (

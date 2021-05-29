@@ -14,6 +14,7 @@ type IncomingConfig = {
     credentials?: Credentials;
     headers?: {
         'Content-Type'?: ContentType;
+        [param: string]: string;
     };
 };
 
@@ -27,8 +28,9 @@ export type RequestFetchConfig = {
     method: MethodType;
     mode: RequestMode;
     credentials: Credentials;
-    body: Body;
+    body?: Body;
     headers: {
         'Content-Type': ContentType;
+        [param: string]: string;
     };
 };

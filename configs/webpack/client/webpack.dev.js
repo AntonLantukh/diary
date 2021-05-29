@@ -19,9 +19,6 @@ const serviceWorker = {
     },
     resolve: {
         extensions: ['.ts', '.tsx', '.js', '.json'],
-        alias: {
-            shared: path.resolve(__dirname, '../../../shared'),
-        },
     },
     devtool: 'source-map',
     target: 'webworker',

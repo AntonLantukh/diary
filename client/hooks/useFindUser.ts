@@ -15,8 +15,7 @@ export const useFindUser = (): void => {
     const {pathname} = useLocation();
 
     useEffect(() => {
-        const findUser = async () => getUser();
-
-        void findUser();
+        // const findUser = async () => getUser();
+        // void findUser();
     }, [pathname]);
 };

@@ -5,6 +5,10 @@ class AccessTokenManager {
         return this.accessToken;
     }
 
+    getDecodedToken() {
+        return btoa(String(this.accessToken));
+    }
+
     setAccessToken(accessToken: string) {
         this.accessToken = accessToken;
     }

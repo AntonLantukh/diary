@@ -15,10 +15,8 @@ const BASE_REQUEST = {
 };
 
 class FetchRequest {
-    private accessToken: string | undefined;
-
-    buildRequest(incomingRequest: IncomingRequest): Promise<any> {
-        const {url, params, config} = incomingRequest;
+    public async buildRequest(req: IncomingRequest): Promise<Response> {
+        const {url, params, config} = req;
         const parsedParams = this.omitNil(params);
         const contentType = this.parseContentType(config);
         const body = this.prepareRequestBody(contentType, parsedParams);
@@ -26,9 +24,7 @@ class FetchRequest {
         const options = this.mergeRequest(config, contentType, body);
         const request = new Request(this.createURL(options, url, parsedParams), options);
 
-        return fetch(request)
-            .then(res => this.handleResponse(res))
-            .catch(this.handleError);
+        return fetch(request);
     }
 
     private prepareRequestBody(contentType: ContentType, params: Params): Body {
@@ -43,29 +39,13 @@ class FetchRequest {
         return this.toUrlEncoded(params || {});
     }
 
-    private handleResponse(response: Response): Promise<any> {
-        if (!response.ok) {
-            return Promise.reject(response);
-        }
-
-        if (/json/.test(response.headers.get('content-type') || '')) {
-            return response.json();
-        }
-
-        return response.text();
-    }
-
-    private handleError(response: Response): any {
-        return response.body;
-    }
-
     private mergeRequest(
         request: IncomingConfig | undefined,
         contentType: ContentType,
         body: Body,
     ): RequestFetchConfig {
         const mergedRequest = mergeDeepRight(
-            {...BASE_REQUEST, headers: {...BASE_REQUEST.headers, 'Content-Type': contentType}},
+            {...BASE_REQUEST, headers: {'Content-Type': contentType}},
             request || {},
         ) as RequestFetchConfig;
 
@@ -115,4 +95,4 @@ class FetchRequest {
     }
 }
 
-export default new FetchRequest();
+export default FetchRequest;
