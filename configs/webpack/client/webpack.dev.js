@@ -9,7 +9,7 @@ const {PATHS, REG_EXP} = require('../../constants');
 const serviceWorker = {
     mode: 'development',
     entry: {
-        apiServiceWorker: path.resolve(__dirname, '../../../client/workers/api.sw.ts'),
+        apiServiceWorker: path.join(PATHS.client, '/workers/api/index.ts'),
     },
     output: {
         filename: '[name].js',
@@ -18,6 +18,7 @@ const serviceWorker = {
         path: path.join(PATHS.dist, 'client'),
     },
     resolve: {
+        extensions: ['.ts', '.tsx', '.js', '.json'],
         alias: {
             shared: path.resolve(__dirname, '../../../shared'),
         },
@@ -102,4 +103,4 @@ const web = {
     },
 };
 
-module.exports = [web, serviceWorker];
+module.exports = [serviceWorker, web];

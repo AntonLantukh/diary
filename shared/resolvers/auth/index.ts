@@ -2,13 +2,13 @@ import request from 'shared/request';
 
 import {METHOD} from 'shared/constants/request';
 
-type SignUpUserArgs = {
+export type SignUpUserArgs = {
     email: string;
     password: string;
     passwordConfirm: string;
 };
 
-type SignInUserArgs = {
+export type SignInUserArgs = {
     email: string;
     password: string;
 };

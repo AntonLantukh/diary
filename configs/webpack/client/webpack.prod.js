@@ -10,7 +10,7 @@ const {PATHS} = require('../../constants');
 const serviceWorker = {
     mode: 'production',
     entry: {
-        apiServiceWorker: path.resolve(__dirname, '../../../client/workers/api.sw.ts'),
+        apiServiceWorker: path.join(PATHS.client, '/workers/api/index.ts'),
     },
     output: {
         filename: '[name].js',
@@ -18,9 +18,15 @@ const serviceWorker = {
         globalObject: 'self',
         path: path.join(PATHS.dist, 'client'),
     },
+    resolve: {
+        extensions: ['.ts', '.tsx', '.js', '.json'],
+        alias: {
+            shared: path.resolve(__dirname, '../../../shared'),
+        },
+    },
     target: 'webworker',
     module: {
-        rules: [babel.dev],
+        rules: [babel.prod],
     },
     plugins: plugins.client.sw.prod,
 };

@@ -120,3 +120,13 @@ export const deleteRefreshToken = (userId: UserId | undefined): Promise<void> =>
         });
     });
 };
+
+export const generateAuthCodeFromAccessToken = (accessToken: string): string => {
+    const decoded = JWT.decode(accessToken);
+
+    if (decoded === null) {
+        createError(500);
+    }
+
+    return btoa(String(decoded));
+};

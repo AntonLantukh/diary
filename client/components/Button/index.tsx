@@ -7,13 +7,15 @@ import css from './style.css';
 type Props = {
     children: ReactElement | string;
     size: 'large' | 'small';
+    component: ReactElement;
     variant: 'contained' | 'outlined';
     onClick: () => void;
     type?: 'submit';
+    to?: 'string';
 };
 
-const CustomButton: FunctionComponent<Props> = ({children, size, variant, onClick, type}) => (
-    <Button className={css.button} {...{variant, size, onClick, type}}>
+const CustomButton: FunctionComponent<Props> = ({children, ...props}) => (
+    <Button className={css.button} {...props}>
         {children}
     </Button>
 );

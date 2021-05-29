@@ -3,6 +3,12 @@ import {Request, Response} from 'express';
 import usersService from '../service/User';
 import {generateAccessToken, generateRefreshToken, deleteRefreshToken} from '../utils/jwt';
 
+const COOKIE_OPTIONS = {
+    httpOnly: true,
+    secure: true,
+    sameSite: 'strict',
+} as const;
+
 class AuthController {
     async signUp(req: Request, res: Response): Promise<void> {
         const userId = await usersService.create(req.body);
@@ -14,15 +20,10 @@ class AuthController {
         const accessToken = await generateAccessToken(req.userId);
         const refreshToken = await generateRefreshToken(req.userId);
 
-        res.cookie('Access-Token', accessToken, {
-            maxAge: Number(process.env.ACCESS_TOKEN_TTL),
-            httpOnly: true,
-            secure: true,
-        });
-        res.cookie('Refresh-Token', refreshToken, {
+        res.header('X-Access-Token', accessToken);
+        res.cookie('X-Refresh-Token', refreshToken, {
             maxAge: Number(process.env.REFRESH_TOKEN_TTL),
-            httpOnly: true,
-            secure: true,
+            ...COOKIE_OPTIONS,
         });
 
         res.redirect('/main');
@@ -32,15 +33,10 @@ class AuthController {
         const accessToken = await generateAccessToken(req.userId);
         const refreshToken = await generateRefreshToken(req.userId);
 
-        res.cookie('Access-Token', accessToken, {
-            maxAge: Number(process.env.ACCESS_TOKEN_TTL),
-            httpOnly: true,
-            secure: true,
-        });
-        res.cookie('Refresh-Token', refreshToken, {
+        res.header('X-Access-Token', accessToken);
+        res.cookie('X-Refresh-Token', refreshToken, {
             maxAge: Number(process.env.REFRESH_TOKEN_TTL),
-            httpOnly: true,
-            secure: true,
+            ...COOKIE_OPTIONS,
         });
 
         res.status(200).send();
@@ -48,6 +44,8 @@ class AuthController {
 
     async logout(req: Request, res: Response): Promise<void> {
         await deleteRefreshToken(req.userId);
+
+        res.clearCookie('X-Refresh-Token');
 
         res.status(200).send();
     }

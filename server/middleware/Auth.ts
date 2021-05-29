@@ -46,7 +46,7 @@ class AuthMiddleware {
     }
 
     async validateAccessToken(req: Request, res: Response, next: NextFunction): Promise<void> {
-        const accessToken = req.cookies['Access-Token'] as string;
+        const accessToken = req.headers['X-Access-Token'] as string;
 
         if (!accessToken) {
             throw new createError.Unauthorized();
@@ -59,7 +59,7 @@ class AuthMiddleware {
     }
 
     async validateRefreshToken(req: Request, res: Response, next: NextFunction): Promise<void> {
-        const refreshToken = req.cookies['Refresh-Token'] as string;
+        const refreshToken = req.cookies['X-Refresh-Token'] as string;
 
         if (!refreshToken) {
             res.redirect(302, '/main');
