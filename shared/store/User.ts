@@ -2,12 +2,12 @@ import {action, computed, makeObservable, observable} from 'mobx';
 
 import {User} from 'shared/typings/user';
 
-interface IUserStore extends User {
+export interface UserStoreInterface extends User {
     getFullName: string;
     editName(name: string): void;
 }
 
-export default class UserStore implements IUserStore {
+export default class UserStore implements UserStoreInterface {
     id;
 
     name;

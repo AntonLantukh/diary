@@ -1,0 +1,13 @@
+.createPost {
+    display: grid;
+    column-gap: 24px;
+}
+
+.createPost__form {
+    display: grid;
+    row-gap: 20px;
+}
+
+.createPost__button {
+    justify-self: flex-start;
+}

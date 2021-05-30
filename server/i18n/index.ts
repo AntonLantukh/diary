@@ -8,7 +8,7 @@ export const defaultOptions = {
     detection: {lookupCookie: 'locale', order: ['cookie', 'header']},
     supportedLngs: ['ru', 'en'],
     fallbackLng: 'en',
-    ns: [...COMMON_NAMESPACES, 'main'],
+    ns: [...COMMON_NAMESPACES, 'main', 'cabinet'],
     defaultNS: 'main',
     backend: {
         loadPath: 'locales/{{ns}}/{{lng}}/index.json',

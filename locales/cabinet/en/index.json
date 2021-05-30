@@ -1,6 +1,6 @@
 {
-    "button": {
-        "register": "Register",
-        "login": "Login"
+    "menu": {
+        "list": "All posts",
+        "create": "Create new post"
     }
 }

@@ -1,9 +1,9 @@
 import React, {FunctionComponent} from 'react';
 
-import css from './style.css';
+import Content from './components/Content';
 
 const NotFound: FunctionComponent = () => {
-    return <div className={css.container} />;
+    return <Content />;
 };
 
 export default NotFound;

@@ -1,4 +1,4 @@
-import {UserGetDto} from './User';
+import {UserGetSecureDto} from './User';
 
 declare global {
     namespace Express {
@@ -11,7 +11,7 @@ declare global {
             };
             userId: string | undefined;
             cspNonce: string;
-            user: UserGetDto | null;
+            user: UserGetSecureDto | null;
             headers: {
                 Authorization: string;
             };

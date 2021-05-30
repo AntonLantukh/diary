@@ -1,11 +1,11 @@
 import React, {FunctionComponent, useCallback} from 'react';
 import {useForm} from 'react-hook-form';
-import {ErrorMessage} from '@hookform/error-message';
 import {useTranslation} from 'react-i18next';
 
 import TextField from '@material-ui/core/TextField';
 import FormControl from '@material-ui/core/FormControl';
 import Button from '˜/components/Button';
+import Error from '˜/components/Error';
 
 import authService from 'client/service/auth';
 
@@ -33,9 +33,7 @@ const SignIn: FunctionComponent = () => {
                     type="email"
                     error={Boolean(errors.email)}
                 />
-                <div className={css.error}>
-                    <ErrorMessage errors={errors} name="email" />
-                </div>
+                <Error name="email" errors={errors} />
             </FormControl>
             <FormControl fullWidth>
                 <TextField
@@ -47,9 +45,7 @@ const SignIn: FunctionComponent = () => {
                     type="password"
                     error={Boolean(errors.password)}
                 />
-                <div className={css.error}>
-                    <ErrorMessage errors={errors} name="password" />
-                </div>
+                <Error name="password" errors={errors} />
             </FormControl>
             <Button type="submit" variant="contained" size="large" onClick={handleSubmit(onSubmit)}>
                 {t('main:authorize.button')}

@@ -44,11 +44,11 @@ const getState = async (req: Request, locale: string, i18nKeys: I18nKeys) => {
     const {getInitialData, name, State} = getMatchedPage(req.path);
 
     const initialPageData = await loadInitialPageData(req.query, getInitialData);
-    const common = new CommonStore({query: req.query, pathName: req.path, pageName: name});
-    const i18n = new I18nStore({locale, i18nKeys});
-    // const user = new UserStore();
+    const common = {query: req.query, pathName: req.path, pageName: name};
+    const i18n = {locale, i18nKeys};
+    const user = req.user || null;
 
-    return new State({...initialPageData, i18n, common});
+    return new State({...initialPageData, i18n, common, user});
 };
 
 class ClientController {

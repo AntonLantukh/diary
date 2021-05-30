@@ -1,0 +1,15 @@
+.posts {
+    display: grid;
+    row-gap: 24px;
+}
+
+.posts__container {
+    display: grid;
+    column-gap: 30px;
+    grid-template-columns: repeat(auto-fill, 360px);
+    row-gap: 30px;
+}
+
+.post {
+    width: auto;
+}

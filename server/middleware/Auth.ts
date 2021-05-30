@@ -46,7 +46,7 @@ class AuthMiddleware {
     }
 
     async validateAccessToken(req: Request, res: Response, next: NextFunction): Promise<void> {
-        const accessToken = req.headers['X-Access-Token'] as string;
+        const accessToken = req.cookies['X-Access-Token'] as string;
 
         if (!accessToken) {
             throw new createError.Unauthorized();

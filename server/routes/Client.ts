@@ -2,7 +2,6 @@ import {Router} from 'express';
 
 import {CommonRouterConfig} from './Common';
 import clientController from '../controller/Client';
-import authMiddleware from '../middleware/Auth';
 
 import {handleAsync} from '../middleware/async';
 
@@ -15,9 +14,7 @@ export class ClientRouter extends CommonRouterConfig {
 
     configureRoutes(): Router {
         this.router.route('/main').get(handleAsync(clientController.generatePage));
-        this.router
-            .route('/cabinet')
-            .get([handleAsync(authMiddleware.validateAccessToken)], handleAsync(clientController.generatePage));
+        this.router.route('/cabinet').get(handleAsync(clientController.generatePage));
         this.router.route('/*').get(handleAsync(clientController.generatePage));
 
         return this.router;

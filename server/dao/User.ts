@@ -33,6 +33,8 @@ class UsersDao {
         const user = (await UserModel.findById(userId).then(user => {
             if (user) {
                 logger.info(`Found user ${JSON.stringify(user)} by userId ${userId}`);
+
+                return user;
             } else {
                 logger.warn(`User by userId ${userId} not found`);
             }

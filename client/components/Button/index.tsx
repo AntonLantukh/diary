@@ -7,9 +7,9 @@ import css from './style.css';
 type Props = {
     children: ReactElement | string;
     size: 'large' | 'small';
-    component: ReactElement;
     variant: 'contained' | 'outlined';
     onClick: () => void;
+    component?: ReactElement;
     type?: 'submit';
     to?: 'string';
 };

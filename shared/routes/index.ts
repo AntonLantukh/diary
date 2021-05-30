@@ -36,7 +36,7 @@ export const routes: RouteConfig[] = [
         path: '/cabinet',
         Component: Cabinet,
         getInitialData: getInitialCabinetState,
-        State: CabinetState,
+        State: MainState,
         privateRoute: true,
     },
     {
@@ -51,14 +51,14 @@ export const routes: RouteConfig[] = [
         name: 'Auth',
         path: '/auth',
         Component: Login,
-        State: BaseState,
+        State: MainState,
         privateRoute: false,
     },
     {
         name: 'NotFound',
         path: '*',
         Component: NotFound,
-        State: BaseState,
+        State: MainState,
         privateRoute: false,
     },
 ];

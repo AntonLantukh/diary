@@ -12,10 +12,10 @@ class FrontRequest extends FetchRequest {
 
     public async buildRequest<T>(req: IncomingRequest): Promise<T> {
         this.origRequest = req;
-        const accessToken = accessTokenManager.getAccessToken();
-        const request = mergeDeepRight(req, {config: {headers: {'X-Access-Token': accessToken}}});
+        // const accessToken = accessTokenManager.getAccessToken();
+        // const request = mergeDeepRight(req, {config: {headers: {'X-Access-Token': accessToken}}});
 
-        return super.buildRequest(request).then(this.handleResponse).catch(this.handleError) as Promise<T>;
+        return super.buildRequest(req).then(this.handleResponse).catch(this.handleError) as Promise<T>;
     }
 
     protected handleResponse(response: Response): Promise<any> {
@@ -43,8 +43,8 @@ class FrontRequest extends FetchRequest {
                 window.location.href = PUBLIC_ROUTE.main;
             }
 
-            const accessToken = refreshTokenResponse.headers.get('X-Access-Token') as string;
-            accessTokenManager.setAccessToken(accessToken);
+            // const accessToken = refreshTokenResponse.headers.get('X-Access-Token') as string;
+            // accessTokenManager.setAccessToken(accessToken);
 
             // Repeat original request with new access token
             return this.buildRequest(this.origRequest as IncomingRequest);

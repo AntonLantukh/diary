@@ -4,7 +4,7 @@ import {initReactI18next} from 'react-i18next';
 export const defaultOptions = {
     whitelist: ['ru', 'en'],
     fallbackLng: 'en',
-    ns: ['header', 'main'],
+    ns: ['header', 'main', 'cabinet'],
     defaultNS: 'main',
     interpolation: {
         escapeValue: false,

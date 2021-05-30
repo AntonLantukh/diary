@@ -13,14 +13,16 @@ import clientRouter from './routes/Client';
 import errorMiddleware from './middleware/error';
 import detectLocale from './middleware/locale';
 import attachCspNonce from './middleware/nonce';
-import helmetConfig from './middleware/helmet';
+import getHelmetConfig from './middleware/helmet';
+import userMiddleware from './middleware/User';
+import {handleAsync} from './middleware/async';
 
 import {routeLogger, errorLogger} from './logger';
 
 const app = express();
 
 app.use(attachCspNonce);
-app.use(helmet(helmetConfig()));
+app.use(helmet(getHelmetConfig()));
 app.use(compression());
 app.use(express.static(path.resolve(__dirname, '../dist/client')));
 app.use(cookieParser());
@@ -29,6 +31,7 @@ app.use(routeLogger);
 app.use(bodyParser.urlencoded({extended: true}));
 app.use(bodyParser.json());
 app.use(errorLogger);
+app.use(handleAsync(userMiddleware.attachUserIfPresent));
 
 app.use('/api/user', userRouter.configureRoutes());
 app.use('/api/auth', authRouter.configureRoutes());

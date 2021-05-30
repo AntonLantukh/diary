@@ -1,0 +1,9 @@
+.cabinet {
+    display: grid;
+    min-height: 80vh;
+    grid-template-columns: max-content auto;
+}
+
+.cabinet__tabs {
+    border-right: 1px solid var(--myPink);
+}

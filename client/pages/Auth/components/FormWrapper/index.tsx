@@ -30,7 +30,6 @@ const FormWrapper: FunctionComponent = () => {
     return (
         <Paper className={css.formWrapper} elevation={2}>
             <Tabs
-                className={css.formWrapper__tabs}
                 value={formType}
                 indicatorColor="primary"
                 textColor="primary"
