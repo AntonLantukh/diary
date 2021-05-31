@@ -19,10 +19,6 @@ import HtmlPage from '../html';
 
 import {setupI18Next} from '../i18n';
 
-import CommonStore from 'shared/store/Common';
-import I18nStore from 'shared/store/I18n';
-import UserStore from 'shared/store/User';
-
 type Context = {
     url?: string;
 };

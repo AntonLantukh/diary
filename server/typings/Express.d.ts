@@ -15,6 +15,9 @@ declare global {
             headers: {
                 Authorization: string;
             };
+            params: {
+                postId?: string;
+            };
         }
     }
 }
